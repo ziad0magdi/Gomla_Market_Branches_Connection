@@ -1,0 +1,20 @@
+.Report_table {
+  width: 100%;
+  border: 1px solid #ccc;
+  text-align: start;
+}
+.Report_table th {
+  transition: color 0.3s ease;
+  background-color: #66bb6a;
+  border: 1px solid #ccc;
+  color: white;
+  font-size: large;
+  font-weight: bold;
+}
+.Report_table td {
+  border: 1px solid #ccc;
+}
+
+.Report_table.dark th {
+  background-color: #c76824;
+}

@@ -1,0 +1,27 @@
+.Boutton_container {
+  min-height: 100%;
+  min-width: 100%;
+  margin-top: 10px;
+  padding: 0.4%;
+  font-size: 20px;
+  font-weight: bold;
+  background: #66bb6a;
+  color: white;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.Boutton_container:hover {
+  background: #4e8f51;
+  color: rgb(201, 201, 201);
+}
+
+.Boutton_container.dark {
+  background: #c76824;
+  color: white;
+}
+
+.Boutton_container.dark:hover {
+  background: #a8581e;
+  color: rgb(201, 201, 201);
+}

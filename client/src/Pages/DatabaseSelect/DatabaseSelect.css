@@ -1,0 +1,37 @@
+.DatabaseSelect_container {
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  background-color: #f9f9f9;
+  color: #333;
+  margin: 0;
+}
+.DatabaseSelect_button {
+  width: 10%;
+  height: 5%;
+  padding-top: 1%;
+  display: flex;
+  justify-content: center;
+  justify-self: center;
+}
+.DatabaseSelect_container h1 {
+  margin: 0;
+}
+
+.DatabaseSelect_container.dark {
+  background-color: #2e2e2e;
+  color: #f1f1f1;
+}
+
+.DatabaseSelect_container h2 {
+  font-size: 24px;
+  color: #333;
+}
+.DatabaseSelect_input {
+  margin: 1%;
+  display: flex;
+  justify-self: center;
+  justify-content: space-between;
+  width: 25%;
+  height: 4%;
+}
