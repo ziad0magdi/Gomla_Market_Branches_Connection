@@ -27,19 +27,20 @@ const NavBar = () => {
             <li className="NavBar_item">
               {language === "en"
                 ? "Add Branches to users"
-                : "إضلفة فروع للمستخدمين"}
+                : "إضافة فروع للمستخدمين"}
             </li>
           </Link>
         )}
-        {/* 
 
-        {Number(userGroup) != 3 && (
-          <Link className="NavBar_link_item" to="/Empolyees">
+        {Number(userGroup) === 1 && (
+          <Link className="NavBar_link_item" to="/ReportToUser">
             <li className="NavBar_item">
-              {language === "en" ? "Employees" : "الموظفين"}
+              {language === "en"
+                ? "Add Reports to User"
+                : "إضافة تقارير للمستخدمين"}
             </li>
           </Link>
-        )} */}
+        )}
       </ul>
     </nav>
   );

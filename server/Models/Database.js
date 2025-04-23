@@ -70,6 +70,7 @@ WHERE B.branch_id = @branch_id AND U.user_id = @user_id`;
       throw err;
     }
   }
+
   /*----------------------------Add Database to user----------------------------------*/
   static async addDatabaseToUser(
     branch_id,

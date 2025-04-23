@@ -36,12 +36,28 @@ CREATE TABLE users (
     user_department_id INT NOT NULL REFERENCES departments(department_id) ON DELETE CASCADE ON UPDATE CASCADE,
 	isApproved VARCHAR(1)
 );
--- Create the branches table
+
+
+-- Create the users_branches table
 CREATE TABLE users_branches (
-    branch_id INT REFERENCES users(user_id),
-	user_id INT REFERENCES branches(branch_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    branch_id INT REFERENCES branches(branch_id) ON DELETE CASCADE ON UPDATE CASCADE, 
+	user_id INT REFERENCES users(user_id),
     user_database_username NVARCHAR(255) NOT NULL,
     user_database_password NVARCHAR(255) NOT NULL,
 	PRIMARY KEY(branch_id, user_id)
+);
+
+-- Create the Reports table
+CREATE TABLE reports (
+    report_id INT PRIMARY KEY IDENTITY(1,1),
+    report_name NVARCHAR(255),
+    report_description NVARCHAR(255),
+);
+
+-- Create the users_reports table
+CREATE TABLE users_reports (
+    report_id INT REFERENCES reports(report_id) ON DELETE CASCADE ON UPDATE CASCADE, 
+	user_id INT REFERENCES users(user_id),
+	PRIMARY KEY(report_id, user_id)
 );
 

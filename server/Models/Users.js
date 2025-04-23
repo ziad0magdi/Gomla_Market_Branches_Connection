@@ -1,6 +1,5 @@
 const QueryEx = require("../Config/QueryEx");
 const db = require("../Config/db");
-const selectedDB = require("../Config/SelectDatsbeas");
 const bcrypt = require("bcryptjs");
 class UsersModel {
   /*----------------------------Get All Users----------------------------------*/

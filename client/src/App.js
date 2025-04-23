@@ -10,6 +10,7 @@ import Header from "./Components/Header/Header";
 import NavBar from "./Components/NavBar/NavBar";
 import DatabaseSelect from "./Pages/DatabaseSelect/DatabaseSelect.js";
 import DatabasetoUser from "./Pages/DatabasetoUser/DatabasetoUser.js";
+import ReportstoUser from "./Pages/ReportstoUser/ReportstoUser.js";
 import SignIn from "./Pages/SignIn/SignIn";
 function App() {
   return (
@@ -27,6 +28,10 @@ function App() {
             <Route
               path="DatabasetoUser"
               element={<ProtectedRoute Component={DatabasetoUser} />}
+            />
+            <Route
+              path="ReportToUser"
+              element={<ProtectedRoute Component={ReportstoUser} />}
             />
           </Routes>
         </Router>

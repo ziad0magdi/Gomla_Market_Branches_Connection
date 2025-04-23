@@ -1,59 +1,91 @@
 import { React, useEffect, useState } from "react";
-import ReportAPI from "../../APIs/ReportAPI";
+import BranchAPI from "../../APIs/BrancheAPI";
 import { useUser } from "../../context/UserContext";
+import Button from "../Button/Button";
+import exportToExcel from "../ExcelImport/ExcelImport";
 import "./Report.css";
 
-const Report = ({ database_id }) => {
-  console.log("database_id inside report >>> ", database_id);
+const Report = ({ database_id, report_id, filters }) => {
   const { language, isDarkMode, user_Id } = useUser();
   const [data, setData] = useState([]);
+  const [selectedRow, setSelectedRow] = useState(null);
+  console.log("report_id", typeof report_id, report_id);
   useEffect(() => {
-    const fetchData = async () => {
-      const result = await ReportAPI.UsersReport(database_id, user_Id);
-      console.log("Result >>> ", result);
-      setData(result.data);
-    };
-    fetchData();
-  }, [database_id]);
+    if (Number(report_id) === 1) {
+      const fetchData = async () => {
+        const result = await BranchAPI.cashirInfo(database_id, user_Id);
+        setData(result.data);
+      };
+      fetchData();
+    }
+  }, [report_id, database_id, user_Id]);
+
+  const clickRow = (index) => {
+    setSelectedRow(index);
+  };
 
   const reportTable = () => {
     return (
-      <table className={`Report_table ${isDarkMode ? "dark" : ""}`}>
-        <thead>
-          <tr>
-            <th>User ID</th>
-            <th>User first Name</th>
-            <th>User last Name</th>
-            <th>User phone</th>
-            <th>User Email</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((user) => (
-            <tr key={user.user_id}>
-              <td>{user.user_id}</td>
-              <td>{user.user_fname}</td>
-              <td>{user.user_lname}</td>
-              <td>{user.user_phone}</td>
-              <td>{user.user_email}</td>
+      <div className="Report_tableWrapper">
+        <table className={`Report_table ${isDarkMode ? "dark" : ""}`}>
+          <thead>
+            <tr>
+              <th>{language === "en" ? "Cashir" : "الكاشير"}</th>
+              <th>{language === "en" ? "monetary" : "نقدي"}</th>
+              <th>{language === "en" ? "credit" : "إئتمان"}</th>
+              <th>{language === "en" ? "Checks" : "الشيكات"}</th>
+              <th>{language === "en" ? "Coupons" : "الكوبونات"}</th>
+              <th>
+                {language === "en" ? "prepaid card" : "كارت مدفوع مقدماً"}
+              </th>
+              <th>{language === "en" ? "Redeem points" : "إستبدال نقاط"}</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {data
+              .filter((object) =>
+                String(object.Cashir)
+                  .toLowerCase()
+                  .includes(filters.toLowerCase())
+              )
+
+              .map((object, index) => (
+                <tr
+                  key={index}
+                  className={selectedRow === index ? "selected-row" : ""}
+                >
+                  <td onClick={() => clickRow(index)}>{object.Cashir}</td>
+                  <td>{object.monetary}</td>
+                  <td>{object.credit}</td>
+                  <td>{object.Checks}</td>
+                  <td>{object.Coupons}</td>
+                  <td>{object.prepaid_card}</td>
+                  <td>{object.Redeem_points}</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+        <div className="Report_button">
+          <Button
+            text={language === "en" ? "Export to Excel" : "تصدير إلى Excel"}
+            onClick={() => exportToExcel(data)}
+          />
+        </div>
+      </div>
     );
   };
 
   return (
     <div className="Report_container">
-      <h1>User Report</h1>
       {data.length > 0 ? (
         reportTable()
       ) : (
         <div className="no-data">
-          {language === "en" ? "No Data Avilabel" : "لا توجد بيانات متوفرة"}
+          {language === "en" ? "No Data Available" : "لا توجد بيانات متوفرة"}
         </div>
       )}
     </div>
   );
 };
+
 export default Report;

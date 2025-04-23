@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import gommlaimage from "./images/GommlaMarket.ico";
 import { useUser } from "../../context/UserContext";
+import Button from "../Button/Button";
 import "./Header.css";
 
 const Header = () => {
@@ -9,10 +10,6 @@ const Header = () => {
     useUser();
 
   const navigate = useNavigate();
-
-  const handleSingInClick = () => {
-    navigate(`/`);
-  };
 
   const handleSingOutClick = () => {
     localStorage.removeItem("isLogin");
@@ -36,32 +33,32 @@ const Header = () => {
       </div>
 
       <div className="Header_right">
-        <button className="Header_toggleTheme" onClick={toggleTheme}>
-          {isDarkMode
-            ? language === "en"
-              ? "Light Mode"
-              : "الوضع النهاري"
-            : language === "en"
-            ? "Dark Mode"
-            : "الوضع الليلي"}
-        </button>
-
-        <button className="Header_toggleLanguage" onClick={toggleLanguage}>
-          {language === "en" ? "عربي" : "English"}
-        </button>
-        <ul className="sign">
-          <li>
-            {isLogin ? (
-              <button className="signIn_btn" onClick={handleSingOutClick}>
-                {language === "en" ? "Signout" : "تسجيل الخروج"}
-              </button>
-            ) : (
-              <button className="signIn_btn" onClick={handleSingInClick}>
-                {language === "en" ? "SignIn" : "تسجيل الدخول"}
-              </button>
-            )}
-          </li>
-        </ul>
+        <div className="Header_Button">
+          <Button
+            text={language === "en" ? "عربي" : "English"}
+            onClick={() => toggleLanguage()}
+          />
+          <Button
+            text={
+              isDarkMode
+                ? language === "en"
+                  ? "Light Mode"
+                  : "الوضع النهاري"
+                : language === "en"
+                ? "Dark Mode"
+                : "الوضع الليلي"
+            }
+            onClick={() => toggleTheme()}
+          />
+          {isLogin ? (
+            <Button
+              text={language === "en" ? "Signout" : "تسجيل الخروج"}
+              onClick={() => handleSingOutClick()}
+            />
+          ) : (
+            ""
+          )}
+        </div>
       </div>
     </header>
   );

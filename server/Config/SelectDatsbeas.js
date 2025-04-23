@@ -13,7 +13,10 @@ const createConnection = async (
     server: database_server,
     database: dbName,
     options: {
+      encrypt: false,
       trustServerCertificate: true,
+      requestTimeout: 3000000,
+      connectionTimeout: 3000000,
     },
   };
   return SelectDatsbeasConfig;

@@ -9,7 +9,7 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 .Header_GommlaIcon {
-  width: 120px;
+  width: 140px;
 }
 .Header_dark {
   background-color: #2e2e2e; /* Dark background for dark mode */
@@ -108,15 +108,12 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .Header_container {
-    flex-direction: column;
-    align-items: flex-start;
+    justify-content: space-between;
     padding: 15px;
   }
 
   .Header_right {
     flex-direction: column;
-    align-items: flex-start;
     gap: 10px;
-    width: 100%;
   }
 }

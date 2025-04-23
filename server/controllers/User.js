@@ -1,6 +1,5 @@
 const UsersModel = require("../models/Users");
 const DatabasesModel = require("../models/Database");
-const DatabasesController = require("./Databases");
 const selectedDB = require("../Config/SelectDatsbeas");
 
 class UsersController {
@@ -31,7 +30,6 @@ class UsersController {
     try {
       if (database_id) {
         const result = await UsersController.createConfig(database_id, user_id);
-        console.log("the config >>> ", result);
         if (result) {
           try {
             const Users = await UsersModel.getAllUsers(result);

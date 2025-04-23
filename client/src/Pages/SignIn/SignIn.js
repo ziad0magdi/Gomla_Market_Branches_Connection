@@ -74,7 +74,7 @@ const SignIn = () => {
         <h2>{language === "en" ? "Sign In" : "تسجيل الدخول"}</h2>
         <form className="signIn_form">
           <input
-            type="text"
+            type="email"
             id="email"
             placeholder={language === "en" ? "Email:" : " الايميل:"}
             name="username"

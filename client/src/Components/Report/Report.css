@@ -1,8 +1,10 @@
 .Report_table {
-  width: 100%;
+  width: 80%;
   border: 1px solid #ccc;
   text-align: start;
+  justify-self: center;
 }
+
 .Report_table th {
   transition: color 0.3s ease;
   background-color: #66bb6a;
@@ -11,10 +13,46 @@
   font-size: large;
   font-weight: bold;
 }
+
+.Report_tableWrapper {
+  max-height: calc(10 * 40px);
+  overflow-y: auto;
+}
+
+/* Optional: fix table header to stay at the top while scrolling */
+.Report_table thead th {
+  position: sticky;
+  top: 0;
+  background: #f4f4f4; /* or use dark background for dark mode */
+  z-index: 1;
+}
+
 .Report_table td {
   border: 1px solid #ccc;
 }
 
+.Report_table td:hover {
+  background-color: #8a8a8a;
+}
+
 .Report_table.dark th {
   background-color: #c76824;
+}
+
+.Report_table tr.selected-row {
+  background-color: #cce5ff; /* light blue background */
+  transition: background-color 0.3s ease;
+}
+
+.Report_table.dark tr.selected-row {
+  background-color: #334d66; /* darker blue for dark mode */
+}
+
+.Report_button {
+  width: 10%;
+  padding-top: 1%;
+  display: flex;
+  justify-content: center;
+  justify-self: center;
+  margin: 0.5%;
 }

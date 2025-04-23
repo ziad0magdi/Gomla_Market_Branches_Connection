@@ -1,31 +1,35 @@
 import { React, useState, useEffect } from "react";
-import { toast } from "react-toastify";
 import DatabaseAPI from "../../APIs/DatabaseAPI";
+import ReportAPI from "../../APIs/ReportAPI";
 import "./DatabaseSelect.css";
 import { useUser } from "../../context/UserContext";
 import Selector from "../../Components/Selector/Selector";
 import Button from "../../Components/Button/Button";
 import Report from "../../Components/Report/Report";
-import TextInput from "../../Components/TextInput/TextInput";
+import SearchBar from "../../Components/SearchBar/SearchBar";
+
 const DatabaseSelect = () => {
   const { language, isDarkMode, user_Id } = useUser();
   const [databases, setDatabases] = useState([]);
   const [selectedDatabase, setSelectedDatabase] = useState();
   const [userName, setUserName] = useState("");
-  const [userPassword, setUserPassword] = useState("");
   const [showReport, setShowReport] = useState(false);
+  const [Reports, setReports] = useState([]);
+  const [selectedReport, setSelectedReport] = useState();
   useEffect(() => {
-    const fetchDatabases = async () => {
+    const fetchData = async () => {
       if (!user_Id) return null;
       try {
-        const response = await DatabaseAPI.getDatabases(user_Id);
-        setDatabases(response.data);
+        const response1 = await DatabaseAPI.getDatabases(user_Id);
+        setDatabases(response1.data);
+        const response2 = await ReportAPI.UsersReport(user_Id);
+        setReports(response2.data);
       } catch (error) {
         console.error("Error fetching databases:", error);
       }
     };
 
-    fetchDatabases();
+    fetchData();
   }, [user_Id]);
 
   useEffect(() => {
@@ -39,78 +43,64 @@ const DatabaseSelect = () => {
   const onSelect = (database) => {
     setSelectedDatabase(database);
   };
-
-  const handleSbmit = async () => {
-    let response;
-
-    response = await DatabaseAPI.AdduserDatabase(
-      selectedDatabase,
-      user_Id,
-      userName,
-      userPassword
-    );
-
-    if (response.status === "success") {
-      toast.success(
-        language === "en"
-          ? "Branch added to the user successfully"
-          : "تمت إضافة الفرع للمستخدم بنجاح"
-      );
-      alert(
-        language === "en"
-          ? "Branch added to the user successfully"
-          : "تمت إضافة الفرع للمستخدم بنجاح"
-      );
-    }
+  const onSelect2 = (Report) => {
+    setSelectedReport(Report);
   };
 
-  console.log("databases >>>>>>>>>>>>>>>>>>> ", databases);
-  console.log("selected >>>>>>>>>>>>>>>>>>> ", selectedDatabase);
   return (
     <div className={`DatabaseSelect_container ${isDarkMode ? "dark" : ""}`}>
-      <h1>
-        {language === "en"
-          ? "Select Your Database"
-          : "اختر قاعدة البيانات الخاصة بك"}
-      </h1>
-      <Selector
-        selectorValues={databases}
-        onSelect={onSelect}
-        selectedValue={selectedDatabase}
-      />
-      {selectedDatabase && (
-        <div className="DatabaseSelect_input">
-          <TextInput
-            placeholder={
-              language === "en" ? "Branch userName" : "اسم المستخدم للفرع"
-            }
-            setData={setUserName}
+      <h1>{language === "en" ? "Select Database" : "اختر قاعدة البيانات"}</h1>
+      <div className="DatabaseSelect_selector">
+        <Selector
+          selectorValues={databases}
+          onSelect={onSelect}
+          selectedValue={selectedDatabase}
+        />
+        {selectedDatabase && (
+          <Selector
+            selectorValues={Reports}
+            onSelect={onSelect2}
+            selectedValue={selectedReport}
           />
-          <TextInput
-            placeholder={
-              language === "en" ? "Branch Password" : "كلمة مرور الفرع"
+        )}
+      </div>
+
+      <div className="DatabaseSelect_button">
+        {selectedReport && (
+          <Button
+            text={
+              showReport
+                ? language === "en"
+                  ? "Hide Report"
+                  : "إخفاء التقرير"
+                : language === "en"
+                ? "Show Report"
+                : "إظهار التقرير"
             }
-            setData={setUserPassword}
+            onClick={() => handleReport()}
+            isDisabled={!selectedDatabase}
+          />
+        )}
+      </div>
+      {showReport && (
+        <div className="DatabaseSelect_input">
+          <SearchBar
+            setData={setUserName}
+            searchText={
+              language === "en"
+                ? "Search by Cashier ID"
+                : "ابحث بأستخدام رقم الكاشير"
+            }
           />
         </div>
       )}
-      <div className="DatabaseSelect_button">
-        <Button
-          text={
-            showReport
-              ? language === "en"
-                ? "Hide Report"
-                : "إخفاء التقرير"
-              : language === "en"
-              ? "Show Report"
-              : "إظهار التقرير"
-          }
-          onClick={() => handleReport()}
-          isDisabled={!selectedDatabase}
+      {showReport && (
+        <Report
+          database_id={selectedDatabase}
+          report_id={selectedReport}
+          filters={userName}
         />
-      </div>
-
-      {showReport && <Report database_id={selectedDatabase} />}
+      )}
     </div>
   );
 };

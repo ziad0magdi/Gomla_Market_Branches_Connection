@@ -18,10 +18,12 @@ app.use(cookieParser());
 app.use(
   cors({
     origin: function (origin, callback) {
+      console.log("Incoming origin:", origin); // Add this line to debug
+
       if (!origin) return callback(null, true);
 
       const allowedPattern =
-        /^http:\/\/(localhost|10\.110\.\d{1,3}\.\d{1,3}):3001$/;
+        /^http:\/\/(localhost|10\.110\.\d{1,3}\.\d{1,3}):300[01]$/;
 
       if (allowedPattern.test(origin)) {
         callback(null, true);
@@ -29,6 +31,7 @@ app.use(
         callback(new Error("Not allowed by CORS"));
       }
     },
+
     methods: ["POST", "GET", "DELETE", "PUT"],
     credentials: true,
   })
@@ -45,6 +48,6 @@ fs.readdirSync(routesPath).forEach((file) => {
 });
 
 // Start the server
-app.listen(PORT, () => {
-  console.log(`Worker running at http://localhost:${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Worker running at http://0.0.0.0:${PORT}`);
 });
