@@ -1,13 +1,13 @@
 import { React, useState, useEffect } from "react";
 import DatabaseAPI from "../../APIs/DatabaseAPI";
 import UserAPI from "../../APIs/UserAPI";
-import "./DatabasetoUser.css";
 import { useUser } from "../../context/UserContext";
-import { toast } from "react-toastify";
+import Toast from "../../Components/Toast/Toast";
 import Selector from "../../Components/Selector/Selector";
 import Button from "../../Components/Button/Button";
 import TextInput from "../../Components/TextInput/TextInput";
-// import CircleGrid from "../../Components/D3/D3";
+import "./DatabasetoUser.css";
+
 const DatabasetoUser = () => {
   const { language, isDarkMode, user_Id, userGroup } = useUser();
   const [databases, setDatabases] = useState([]);
@@ -16,32 +16,21 @@ const DatabasetoUser = () => {
   const [selectedUser, setSelectedUser] = useState();
   const [userName, setUserName] = useState("");
   const [userPassword, setUserPassword] = useState("");
+
   useEffect(() => {
     const fetchDatabases = async () => {
-      if (!user_Id) return null;
+      if (!userGroup) return null;
       try {
-        const response = await DatabaseAPI.getAllDatabases();
-        setDatabases(response.data);
+        const response1 = await DatabaseAPI.getAllDatabases();
+        setDatabases(response1.data);
+        const response2 = await UserAPI.getUser();
+        setUsers(response2.data);
       } catch (error) {
         console.error("Error fetching databases:", error);
       }
     };
     fetchDatabases();
-  }, [user_Id]);
-
-  useEffect(() => {
-    const fetchDatabases = async () => {
-      if (!user_Id) return null;
-      try {
-        const response = await UserAPI.getUser();
-        setUsers(response.data);
-      } catch (error) {
-        console.error("Error fetching databases:", error);
-      }
-    };
-
-    fetchDatabases();
-  }, [user_Id]);
+  }, [userGroup]);
 
   const handleSbmit = async () => {
     let response;
@@ -60,18 +49,7 @@ const DatabasetoUser = () => {
         userPassword
       );
     }
-    if (response.status === "success") {
-      toast.success(
-        language === "en"
-          ? "Branch added to the user successfully"
-          : "تمت إضافة الفرع للمستخدم بنجاح"
-      );
-      alert(
-        language === "en"
-          ? "Branch added to the user successfully"
-          : "تمت إضافة الفرع للمستخدم بنجاح"
-      );
-    }
+    <Toast message={"Success Adding Branch to the user"} type={"success"} />;
   };
 
   const onSelectDatabase = (database) => {
@@ -82,7 +60,6 @@ const DatabasetoUser = () => {
     setSelectedUser(user);
   };
 
-  console.log("ueser", users);
   return (
     <div className={`DatabasetoUser_container ${isDarkMode ? "dark" : ""}`}>
       <h1>
@@ -141,9 +118,3 @@ const DatabasetoUser = () => {
 };
 
 export default DatabasetoUser;
-
-/* 
-note: - the d3 code is commented out because it is not used in the current implementation.
-if the user didnt have access retuen "this user didnt have access" to database then make him enter the username and password and when make the connection 
-add the user to the database and then add the database to the user.
-*/

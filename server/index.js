@@ -23,7 +23,7 @@ app.use(
       if (!origin) return callback(null, true);
 
       const allowedPattern =
-        /^http:\/\/(localhost|10\.110\.\d{1,3}\.\d{1,3}):300[01]$/;
+        /^http:\/\/(localhost|10\.110\.\d{1,3}\.\d{1,3}):[34]00[01]$/;
 
       if (allowedPattern.test(origin)) {
         callback(null, true);

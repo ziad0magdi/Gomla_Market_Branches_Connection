@@ -15,7 +15,7 @@
 }
 
 .Report_tableWrapper {
-  max-height: calc(10 * 40px);
+  max-height: calc(10 * 50px);
   overflow-y: auto;
 }
 
@@ -23,7 +23,6 @@
 .Report_table thead th {
   position: sticky;
   top: 0;
-  background: #f4f4f4; /* or use dark background for dark mode */
   z-index: 1;
 }
 

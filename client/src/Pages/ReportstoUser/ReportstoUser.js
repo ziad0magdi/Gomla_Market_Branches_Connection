@@ -55,8 +55,6 @@ const ReportstoUser = () => {
   const onSelectUser = (user) => {
     setSelectedUser(user);
   };
-
-  console.log("ueser", users);
   return (
     <div className={`ReportstoUser_container ${isDarkMode ? "dark" : ""}`}>
       <h1>
@@ -92,7 +90,6 @@ const ReportstoUser = () => {
           isDisabled={!selectedReport}
         />
       </div>
-      <div className="ReportstoUser_d3"></div>
     </div>
   );
 };

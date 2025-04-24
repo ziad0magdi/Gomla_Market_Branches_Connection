@@ -29,3 +29,14 @@ INNER JOIN users AS U
 ON U.user_id = UB.user_id
 WHERE B.branch_id = 1
 
+---- Get user's Reports
+SELECT 
+R.report_id,
+R.report_name
+FROM reports AS R 
+INNER JOIN users_reports AS UR
+ON R.report_id = UR.report_id
+WHERE UR.user_id = 1
+
+
+SELECT * FROM users_reports
