@@ -33,32 +33,30 @@ const Header = () => {
       </div>
 
       <div className="Header_right">
-        <div className="Header_Button">
+        <Button
+          text={language === "en" ? "عربي" : "English"}
+          onClick={() => toggleLanguage()}
+        />
+        <Button
+          text={
+            isDarkMode
+              ? language === "en"
+                ? "Light Mode"
+                : "الوضع النهاري"
+              : language === "en"
+              ? "Dark Mode"
+              : "الوضع الليلي"
+          }
+          onClick={() => toggleTheme()}
+        />
+        {isLogin ? (
           <Button
-            text={language === "en" ? "عربي" : "English"}
-            onClick={() => toggleLanguage()}
+            text={language === "en" ? "Signout" : "تسجيل الخروج"}
+            onClick={() => handleSingOutClick()}
           />
-          <Button
-            text={
-              isDarkMode
-                ? language === "en"
-                  ? "Light Mode"
-                  : "الوضع النهاري"
-                : language === "en"
-                ? "Dark Mode"
-                : "الوضع الليلي"
-            }
-            onClick={() => toggleTheme()}
-          />
-          {isLogin ? (
-            <Button
-              text={language === "en" ? "Signout" : "تسجيل الخروج"}
-              onClick={() => handleSingOutClick()}
-            />
-          ) : (
-            ""
-          )}
-        </div>
+        ) : (
+          ""
+        )}
       </div>
     </header>
   );

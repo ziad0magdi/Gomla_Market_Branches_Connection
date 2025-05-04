@@ -12,7 +12,7 @@ function Selector({ headerText, selectorValues, onSelect, selectedValue }) {
         className="Selector_dropdown"
         value={selectedValue}
       >
-        <option value="">
+        <option className="Selector_dropdown_item" value="">
           {language === "en" ? "-- Select--" : "-- اختر --"}
         </option>
         {selectorValues.map((selectorValue, index) => {

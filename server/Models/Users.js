@@ -10,10 +10,8 @@ class UsersModel {
     } else {
       dbconfig = db.primaryConfig;
     }
-    console.log("Database config in Model >>> ", selectedDBConfig);
     try {
       const query = "SELECT * FROM users";
-      // const query = "SELECT TOP 100 barcode FROM sys_discount_items";
       const result = await QueryEx.executeQuery(dbconfig, query);
       return result.recordset; // Return all users
     } catch (err) {

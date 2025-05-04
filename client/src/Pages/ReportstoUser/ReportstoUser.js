@@ -60,36 +60,34 @@ const ReportstoUser = () => {
       <h1>
         {language === "en" ? "Assign Report to User" : "إضافه تقرير للمستخدم"}
       </h1>
-      <Selector
-        headerText={
-          language === "en"
-            ? "Select Report to add to the user"
-            : "اختر التقرير الذي تريد إضافته للمستخدم"
-        }
-        selectorValues={reports}
-        onSelect={onSelectReport}
-        selectedValue={selectedReport}
-      />
-
-      {selectedReport && userGroup === 1 && (
+      <div className="ReportstoUser_Selector">
         <Selector
-          headerText={language === "en" ? "Select User" : "اختر المستخدم"}
-          selectorValues={users}
-          onSelect={onSelectUser}
-          selectedValue={selectedUser}
+          selectorValues={reports}
+          onSelect={onSelectReport}
+          selectedValue={selectedReport}
         />
-      )}
-      <div className="ReportstoUser_button">
-        <Button
-          text={
-            language === "en"
-              ? "Add Report to the user"
-              : "إضافة تقرير للمستخدم"
-          }
-          onClick={() => handleSbmit()}
-          isDisabled={!selectedReport}
-        />
+
+        {selectedReport && userGroup === 1 && (
+          <Selector
+            selectorValues={users}
+            onSelect={onSelectUser}
+            selectedValue={selectedUser}
+          />
+        )}
       </div>
+      {selectedReport && (
+        <div className="ReportstoUser_button">
+          <Button
+            text={
+              language === "en"
+                ? "Add Report to the user"
+                : "إضافة تقرير للمستخدم"
+            }
+            onClick={() => handleSbmit()}
+            isDisabled={!selectedReport}
+          />
+        </div>
+      )}
     </div>
   );
 };

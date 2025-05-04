@@ -1,4 +1,4 @@
-const ReportsModel = require("../models/Report");
+const ReportsModel = require("../Models/Report");
 
 class ReportController {
   static async getAllReports(req, res) {

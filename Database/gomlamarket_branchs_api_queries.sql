@@ -1,3 +1,4 @@
+SELECT * FROM reports
 ---- GET All databases For 1 User
 SELECT
 B.branch_name,

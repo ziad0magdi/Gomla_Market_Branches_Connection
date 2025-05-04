@@ -36,3 +36,26 @@
   width: 25%;
   height: 4%;
 }
+.DatabasetoUser_Selector {
+  width: 15%;
+  justify-self: center;
+}
+@media (max-width: 768px) {
+  .DatabasetoUser_button {
+    min-height: 5%;
+    min-width: 50%;
+  }
+
+  .DatabasetoUser_input {
+    display: flex;
+    justify-self: center;
+    justify-content: space-between;
+    width: 90%;
+    height: 4%;
+  }
+  .DatabasetoUser_Selector {
+    width: 54%;
+    justify-self: center;
+    color: #333;
+  }
+}

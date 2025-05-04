@@ -1,38 +1,62 @@
-import { React, useEffect, useState } from "react";
+import { React, useEffect, useState, useCallback } from "react";
 import BranchAPI from "../../APIs/BrancheAPI";
 import { useUser } from "../../context/UserContext";
 import Button from "../Button/Button";
+
 import exportToExcel from "../ExcelImport/ExcelImport";
 import Selector from "../Selector/Selector";
-import BarChart from "../Chars/BarChart";
+import BarChart from "../Charts/BarChart";
+import PieChart from "../Charts/PieChart";
 import "./Report.css";
 
-const Report = ({ database_id, report_id, filters }) => {
+const Report = ({ database_id, report_id, filters, date }) => {
   const { language, isDarkMode, user_Id } = useUser();
   const [data, setData] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
   const [showChart, setShowChart] = useState(false);
-  const [charts, setCharts] = useState([
+  const [charts] = useState([
     {
       Chart_id: 1,
       Chart_name: "Bar Chart",
     },
+    {
+      Chart_id: 2,
+      Chart_name: "Pie Chart",
+    },
   ]);
+
   const [selectedChart, setSelectedChart] = useState(null);
   const [selectedFild, setSelectedFild] = useState(null);
   const [xData, setXData] = useState([]);
   const [yData, setYData] = useState([]);
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const fetchData = useCallback(async () => {
+    setError(false);
+    setLoading(true);
+
+    try {
+      let result;
+      if (Number(report_id) === 1) {
+        result = await BranchAPI.Report1(database_id, user_Id, date);
+      } else if (Number(report_id) === 2) {
+        result = await BranchAPI.Report2(database_id, user_Id, date);
+      }
+
+      setData(result.data);
+      setXData(result.data.map((item) => item.Cashier));
+    } catch (err) {
+      console.error("Error fetching data:", err);
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  }, [report_id, database_id, user_Id, date]);
 
   useEffect(() => {
-    if (Number(report_id) === 1) {
-      const fetchData = async () => {
-        const result = await BranchAPI.cashirInfo(database_id, user_Id);
-        setData(result.data);
-        setXData(result.data.map((item) => item.Cashir));
-      };
-      fetchData();
-    }
-  }, [report_id, database_id, user_Id]);
+    fetchData();
+  }, [fetchData]);
 
   const clickRow = (index) => {
     setSelectedRow(index);
@@ -63,29 +87,90 @@ const Report = ({ database_id, report_id, filters }) => {
     }
   };
 
-  console.log("showChart", showChart);
+  if (loading) return <p>Loading...</p>;
+  if (error)
+    return (
+      <Button
+        text={
+          language === "en"
+            ? "Error occurred please try again"
+            : "حدث خطأ يرجى المحاولة مرة أخرى"
+        }
+        onClick={fetchData}
+      />
+    );
 
   const reportTable = () => {
     return (
       <div className="Report_tableWrapper">
+        <div className="Date_title">
+          <h1>
+            {language === "en"
+              ? "Date From  " + date
+              : "بداية التاريخ  " + date}
+          </h1>
+        </div>
         <table className={`Report_table ${isDarkMode ? "dark" : ""}`}>
-          <thead>
-            <tr>
-              <th>{language === "en" ? "Cashir" : "الكاشير"}</th>
-              <th>{language === "en" ? "monetary" : "نقدي"}</th>
-              <th>{language === "en" ? "credit" : "إئتمان"}</th>
-              <th>{language === "en" ? "Checks" : "الشيكات"}</th>
-              <th>{language === "en" ? "Coupons" : "الكوبونات"}</th>
-              <th>
-                {language === "en" ? "prepaid card" : "كارت مدفوع مقدماً"}
-              </th>
-              <th>{language === "en" ? "Redeem points" : "إستبدال نقاط"}</th>
-            </tr>
-          </thead>
+          {Number(report_id) === 1 ? (
+            <thead>
+              <tr>
+                <th>{language === "en" ? "Cashir" : "الكاشير"}</th>
+                <th>{language === "en" ? "monetary" : "نقدي"}</th>
+                <th>{language === "en" ? "credit" : "إئتمان"}</th>
+                <th>{language === "en" ? "Checks" : "الشيكات"}</th>
+                <th>{language === "en" ? "Coupons" : "الكوبونات"}</th>
+                <th>
+                  {language === "en" ? "prepaid card" : "كارت مدفوع مقدماً"}
+                </th>
+                <th>{language === "en" ? "Redeem points" : "إستبدال نقاط"}</th>
+              </tr>
+            </thead>
+          ) : Number(report_id) === 2 ? (
+            <thead>
+              <tr>
+                <th>{language === "en" ? "Cashir" : "الكاشير"}</th>
+                <th>{language === "en" ? "Sold Value" : "قيمة المبيعات"}</th>
+                <th>{language === "en" ? "Paid Value" : "القيمة المسددة"}</th>
+                <th>
+                  {language === "en"
+                    ? "The difference between the sales value and the paid value"
+                    : "الفرف بين قيمة المبيعات و القيمة المسددة"}
+                </th>
+                <th>{language === "en" ? "Monetary" : "نقدي"}</th>
+                <th>
+                  {language === "en" ? "Monetary Count" : "عدد مرات النقدي"}
+                </th>
+                <th>{language === "en" ? "Credit" : "إئتمان"}</th>
+                <th>
+                  {language === "en" ? "Credit Count" : "عدد مرات إئتمان"}
+                </th>
+                <th>{language === "en" ? "Coupons" : "الكوبونات"}</th>
+                <th>
+                  {language === "en" ? "Coupons Count" : "عدد مرات الكوبونات"}
+                </th>
+                <th>{language === "en" ? "Voucher" : "كارت مدفوع مقدماً"}</th>
+                <th>
+                  {language === "en"
+                    ? "Voucher Count"
+                    : "عدد مرات كارت مدفوع مقدماً"}
+                </th>
+                <th>
+                  {language === "en" ? "Points Redeem Count" : "إستبدال النقاط"}
+                </th>
+                <th>
+                  {language === "en"
+                    ? "Points Redeem Count"
+                    : "عدد مرات إستبدال النقاط"}
+                </th>
+              </tr>
+            </thead>
+          ) : (
+            ""
+          )}
           <tbody>
             {data
               .filter((object) =>
-                String(object.Cashir)
+                String(object.Cashier)
                   .toLowerCase()
                   .includes(filters.toLowerCase())
               )
@@ -99,8 +184,24 @@ const Report = ({ database_id, report_id, filters }) => {
                     className={selectedRow === index ? "selected-row" : ""}
                   >
                     {keys.map((key, i) => {
-                      if (key === "branch") return null;
-                      return <td key={i}>{object[key]}</td>;
+                      if (
+                        key === "branch" ||
+                        key === "Remaining_Total" ||
+                        key === "Remaining_Count"
+                      )
+                        return null;
+                      if (
+                        key === "Value_difference" &&
+                        object.Value_difference < 0
+                      ) {
+                        return (
+                          <td className="negative" key={i}>
+                            {object[key]}
+                          </td>
+                        );
+                      } else {
+                        return <td key={i}>{object[key]}</td>;
+                      }
                     })}
                   </tr>
                 );
@@ -146,9 +247,8 @@ const Report = ({ database_id, report_id, filters }) => {
         </div>
         {showChart && (
           <div className="Report_chart">
-            {selectedChart === "Bar Chart" && (
-              <BarChart xData={xData} yData={yData} />
-            )}
+            {selectedChart === "1" && <BarChart xData={xData} yData={yData} />}
+            {selectedChart === "2" && <PieChart data={xData} labels={yData} />}
           </div>
         )}
       </div>

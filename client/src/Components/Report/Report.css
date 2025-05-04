@@ -16,6 +16,7 @@
 
 .Report_tableWrapper {
   max-height: calc(10 * 50px);
+
   overflow-y: auto;
 }
 
@@ -54,4 +55,30 @@
   justify-content: center;
   justify-self: center;
   margin: 0.5%;
+}
+
+.Report_chart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.Report_chart.dark {
+  background-color: #2e2e2e;
+}
+.Date_title {
+  display: flex;
+  justify-content: center;
+}
+
+.negative {
+  background-color: red;
+}
+@media (max-width: 768px) {
+  .Report_button {
+    min-height: 30%;
+    min-width: 50%;
+  }
+  .Report_table {
+    min-width: 14%;
+  }
 }

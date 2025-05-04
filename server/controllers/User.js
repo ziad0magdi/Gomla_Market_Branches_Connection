@@ -1,5 +1,5 @@
-const UsersModel = require("../models/Users");
-const DatabasesModel = require("../models/Database");
+const UsersModel = require("../Models/Users");
+const DatabasesModel = require("../Models/Database");
 const selectedDB = require("../Config/SelectDatsbeas");
 
 class UsersController {

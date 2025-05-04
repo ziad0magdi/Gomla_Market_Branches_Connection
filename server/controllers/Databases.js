@@ -1,7 +1,47 @@
-const DatabasesModel = require("../models/Database");
+const DatabasesModel = require("../Models/Database");
 const selectedDB = require("../Config/SelectDatsbeas");
 
 class DatabasesController {
+  static async createConfig(database_id) {
+    const database = await DatabasesModel.getSelectedDatabase(database_id);
+    if (!database || database.length === 0) {
+      return null;
+    }
+    const branch_ip = database[0].branch_ip;
+    const database_name = database[0].database_name;
+    const user_database_username = user_database_username;
+    const user_database_password = user_database_password;
+    const result = await selectedDB.createConnection(
+      user_database_password,
+      user_database_username,
+      branch_ip,
+      database_name
+    );
+    return result;
+  }
+
+  static async validateUser(
+    database_id,
+    user_database_username,
+    user_database_password
+  ) {
+    try {
+      const database = await DatabasesModel.getDatabaseConfig(database_id);
+      const branch_ip = database[0].branch_ip;
+      const database_name = database[0].database_name;
+      const connection = await selectedDB.validateUser(
+        user_database_username,
+        user_database_password,
+        branch_ip,
+        database_name
+      );
+      return connection;
+    } catch (error) {
+      console.error("Error fetching User selected Database:", error);
+      res.status(500).json({ message: "Server Error", error });
+    }
+  }
+
   static async getAllDatabases(req, res) {
     try {
       const databases = await DatabasesModel.getAllDatabases();
@@ -37,49 +77,35 @@ class DatabasesController {
     }
   }
 
-  static async connectUserDatabase(req, res) {
-    const database_id = Number(req.body.database_id);
-    try {
-      const database = await DatabasesModel.getSelectedUserDatabase(
-        database_id
-      );
-      const branch_ip = database[0].branch_ip;
-      const database_name = database[0].database_name;
-      const user_database_username = database[0].user_database_username;
-      const user_database_password = database[0].user_database_password;
-      const connection = await selectedDB.connectToDatabase(
-        branch_ip,
-        database_name,
-        user_database_username,
-        user_database_password
-      );
-      if (connection) {
-        res.json(connection);
-      } else {
-        res.status(500).json({ message: "Failed to connect to database" });
-      }
-    } catch (error) {
-      console.error("Error fetching User selected Database:", error);
-      res.status(500).json({ message: "Server Error", error });
-    }
-  }
-
   static async addDatabaseToUser(req, res) {
     const branch_id = Number(req.body.branch_id);
     const user_id = Number(req.body.user_id);
     const user_database_username = req.body.user_database_username;
     const user_database_password = req.body.user_database_password;
+    console.log("<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>");
     try {
-      const result = await DatabasesModel.addDatabaseToUser(
+      const connect = await DatabasesController.validateUser(
         branch_id,
         user_database_username,
-        user_database_password,
-        user_id
+        user_database_password
       );
-      res.json({
-        status: "success",
-        message: "Database added to user successfully",
-      });
+      if (connect) {
+        const result = await DatabasesModel.addDatabaseToUser(
+          branch_id,
+          user_database_username,
+          user_database_password,
+          user_id
+        );
+        res.json({
+          status: "success",
+          message: "Database added to user successfully",
+        });
+      } else {
+        res.json({
+          status: "failed",
+          message: "user has Wrong username or password",
+        });
+      }
     } catch (error) {
       console.error("Error fetching User selected Database:", error);
       res.status(500).json({ message: "Server Error", error });

@@ -1,11 +1,11 @@
 import { React, useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import DatabaseAPI from "../../APIs/DatabaseAPI";
 import UserAPI from "../../APIs/UserAPI";
 import { useUser } from "../../context/UserContext";
-import Toast from "../../Components/Toast/Toast";
 import Selector from "../../Components/Selector/Selector";
 import Button from "../../Components/Button/Button";
-import TextInput from "../../Components/TextInput/TextInput";
+import TextInput from "../../Components/Inputs/TextInput";
 import "./DatabasetoUser.css";
 
 const DatabasetoUser = () => {
@@ -49,7 +49,11 @@ const DatabasetoUser = () => {
         userPassword
       );
     }
-    <Toast message={"Success Adding Branch to the user"} type={"success"} />;
+    if (response.data.status === "success") {
+      toast.success("Branch is added to the user successfully");
+    } else if (response.data.status === "failed") {
+      toast.error("Wrong username or password");
+    }
   };
 
   const onSelectDatabase = (database) => {
@@ -63,29 +67,23 @@ const DatabasetoUser = () => {
   return (
     <div className={`DatabasetoUser_container ${isDarkMode ? "dark" : ""}`}>
       <h1>
-        {language === "en"
-          ? "Assign Database to User"
-          : "تعيين قاعدة البيانات للمستخدم"}
+        {language === "en" ? "Assign Branch to User" : "تعيين فرع للمستخدم"}
       </h1>
-      <Selector
-        headerText={
-          language === "en"
-            ? "Select Your Database"
-            : "اختر قاعدة البيانات الخاصة بك"
-        }
-        selectorValues={databases}
-        onSelect={onSelectDatabase}
-        selectedValue={selectedDatabase}
-      />
-
-      {selectedDatabase && userGroup === 1 && (
+      <div className="DatabasetoUser_Selector">
         <Selector
-          headerText={language === "en" ? "Select User" : "اختر المستخدم"}
-          selectorValues={users}
-          onSelect={onSelectUser}
-          selectedValue={selectedUser}
+          selectorValues={databases}
+          onSelect={onSelectDatabase}
+          selectedValue={selectedDatabase}
         />
-      )}
+
+        {selectedDatabase && userGroup === 1 && (
+          <Selector
+            selectorValues={users}
+            onSelect={onSelectUser}
+            selectedValue={selectedUser}
+          />
+        )}
+      </div>
 
       {selectedDatabase && (
         <div className="DatabasetoUser_input">
@@ -103,15 +101,19 @@ const DatabasetoUser = () => {
           />
         </div>
       )}
-      <div className="DatabasetoUser_button">
-        <Button
-          text={
-            language === "en" ? "Add Branch to the user" : "إضافة فرع للمستخدم"
-          }
-          onClick={() => handleSbmit()}
-          isDisabled={!selectedDatabase}
-        />
-      </div>
+      {selectedDatabase && (
+        <div className="DatabasetoUser_button">
+          <Button
+            text={
+              language === "en"
+                ? "Add Branch to the user"
+                : "إضافة فرع للمستخدم"
+            }
+            onClick={() => handleSbmit()}
+            isDisabled={!selectedDatabase}
+          />
+        </div>
+      )}
       <div className="DatabasetoUser_d3"></div>
     </div>
   );

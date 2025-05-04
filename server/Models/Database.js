@@ -43,6 +43,38 @@ WHERE U.user_id = @user_id`;
     }
   }
 
+  /*----------------------------Get All Database Info----------------------------------*/
+  static async getSelectedDatabase(branch_id) {
+    let dbconfig;
+    dbconfig = db.primaryConfig;
+    try {
+      const query = `SELECT branch_ip, database_name FROM branches WHERE branch_id = branch_id`;
+      const params = {
+        branch_id: branch_id,
+      };
+      const result = await QueryEx.executeQuery(dbconfig, query, params);
+      return result.recordset;
+    } catch (err) {
+      console.error("Error Fetching User Databases:", err);
+      throw err;
+    }
+  }
+  /*----------------------------Get All User's Databases----------------------------------*/
+  static async getDatabaseConfig(branch_id) {
+    let dbconfig;
+    dbconfig = db.primaryConfig;
+    try {
+      const query = `SELECT branch_ip, database_name FROM branches WHERE branch_id = @branch_id`;
+      const params = {
+        branch_id: branch_id,
+      };
+      const result = await QueryEx.executeQuery(dbconfig, query, params);
+      return result.recordset;
+    } catch (err) {
+      console.error("Error Fetching User Databases:", err);
+      throw err;
+    }
+  }
   /*----------------------------Get All User's Databases----------------------------------*/
   static async getSelectedUserDatabase(branch_id, user_id) {
     let dbconfig;
@@ -89,6 +121,25 @@ VALUES (@branch_id, @user_id, @user_database_username, @user_database_password)`
         user_database_username: user_database_username,
         user_database_password: user_database_password,
       };
+      const result = await QueryEx.executeQuery(dbconfig, query, params);
+      return result.recordset;
+    } catch (err) {
+      console.error("Error Fetching User Databases:", err);
+      throw err;
+    }
+  }
+
+  /*----------------------------Delete Database from user----------------------------------*/
+  static async DeleteDatabaseFromUser(branch_id, user_id) {
+    let dbconfig;
+    dbconfig = db.primaryConfig;
+    try {
+      const query = `DELETE FROM users_branches WHERE branch_id = @branch_id AND user_id = @user_id`;
+      const params = {
+        branch_id: branch_id,
+        user_id: user_id,
+      };
+
       const result = await QueryEx.executeQuery(dbconfig, query, params);
       return result.recordset;
     } catch (err) {

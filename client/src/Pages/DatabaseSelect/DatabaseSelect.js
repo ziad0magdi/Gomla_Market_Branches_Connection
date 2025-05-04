@@ -4,6 +4,7 @@ import ReportAPI from "../../APIs/ReportAPI";
 import "./DatabaseSelect.css";
 import { useUser } from "../../context/UserContext";
 import Selector from "../../Components/Selector/Selector";
+import DateInput from "../../Components/Inputs/DateInput";
 import Button from "../../Components/Button/Button";
 import Report from "../../Components/Report/Report";
 import SearchBar from "../../Components/SearchBar/SearchBar";
@@ -12,6 +13,17 @@ const DatabaseSelect = () => {
   const { language, isDarkMode, user_Id } = useUser();
   const [databases, setDatabases] = useState([]);
   const [selectedDatabase, setSelectedDatabase] = useState();
+
+  let fullDate;
+  const currentDate = new Date();
+  currentDate.setDate(currentDate.getDate() - 1);
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+  const day = String(currentDate.getDate()).padStart(2, "0");
+  fullDate = `${year}-${month}-${day}`;
+
+  const [dateFrom, setDateFrom] = useState(fullDate);
+  // const [dateTo, setDateTo] = useState([]);
   const [userName, setUserName] = useState("");
   const [showReport, setShowReport] = useState(false);
   const [Reports, setReports] = useState([]);
@@ -49,7 +61,7 @@ const DatabaseSelect = () => {
 
   return (
     <div className={`DatabaseSelect_container ${isDarkMode ? "dark" : ""}`}>
-      <h1>{language === "en" ? "Select Database" : "اختر قاعدة البيانات"}</h1>
+      <h1>{language === "en" ? "Select Branch" : "اختر الفرع"}</h1>
       <div className="DatabaseSelect_selector">
         <Selector
           selectorValues={databases}
@@ -64,7 +76,6 @@ const DatabaseSelect = () => {
           />
         )}
       </div>
-
       <div className="DatabaseSelect_button">
         {selectedReport && (
           <Button
@@ -82,6 +93,12 @@ const DatabaseSelect = () => {
           />
         )}
       </div>
+      {selectedDatabase && (
+        <div className="DateInput">
+          <DateInput value={dateFrom} setData={setDateFrom} />
+          {/* <DateInput value={dateTo} setData={setDateTo} /> */}
+        </div>
+      )}
       {showReport && (
         <div className="DatabaseSelect_input">
           <SearchBar
@@ -99,6 +116,7 @@ const DatabaseSelect = () => {
           database_id={selectedDatabase}
           report_id={selectedReport}
           filters={userName}
+          date={dateFrom}
         />
       )}
     </div>

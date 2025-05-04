@@ -1,4 +1,4 @@
-.TextInput_container {
+.Input_container {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -8,7 +8,7 @@
   min-width: 40%;
   font-weight: bold;
 }
-.TextInput_container.dark {
+.Input_container.dark {
   background-color: #2e2e2e;
   color: #f1f1f1;
 }

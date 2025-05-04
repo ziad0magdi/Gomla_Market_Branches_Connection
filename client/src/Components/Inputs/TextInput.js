@@ -1,5 +1,5 @@
 import { React } from "react";
-import "./TextInput.css";
+import "./Inputs.css";
 import { useUser } from "../../context/UserContext";
 
 const TextInput = ({ placeholder, setData, isDisabled }) => {
@@ -7,7 +7,7 @@ const TextInput = ({ placeholder, setData, isDisabled }) => {
   return (
     <input
       type="text"
-      className={`TextInput_container ${isDarkMode ? "dark" : ""}`}
+      className={`Input_container ${isDarkMode ? "dark" : ""}`}
       onChange={(e) => setData(e.target.value)}
       disabled={isDisabled}
       placeholder={placeholder}

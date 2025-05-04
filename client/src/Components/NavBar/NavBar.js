@@ -22,7 +22,7 @@ const NavBar = () => {
           </li>
         </Link>
 
-        {userGroup !== 3 && (
+        {userGroup === 1 && (
           <Link className="NavBar_link_item" to="/DatabasetoUser">
             <li className="NavBar_item">
               {language === "en"

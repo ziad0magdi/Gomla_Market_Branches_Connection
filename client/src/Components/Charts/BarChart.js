@@ -1,12 +1,14 @@
 import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
-
+import { toast } from "react-toastify";
+import { useUser } from "../../context/UserContext";
+import "./Charts.css";
 const BarChart = ({ xData, yData }) => {
+  const { isDarkMode } = useUser();
   const svgRef = useRef();
 
   useEffect(() => {
     if (!xData || !yData || xData.length !== yData.length) return;
-
     const width = 600;
     const height = 400;
     const margin = { top: 20, right: 30, bottom: 40, left: 50 };
@@ -15,10 +17,10 @@ const BarChart = ({ xData, yData }) => {
       .select(svgRef.current)
       .attr("width", width)
       .attr("height", height)
-      .style("background", "#f4f4f4")
+      .style("background", `${isDarkMode ? "#2e2e2e" : "#f4f4f4"}`)
       .style("overflow", "visible");
 
-    svg.selectAll("*").remove(); // Clear previous render
+    svg.selectAll("*").remove();
 
     const xScale = d3
       .scaleBand()
@@ -38,7 +40,12 @@ const BarChart = ({ xData, yData }) => {
     svg
       .append("g")
       .attr("transform", `translate(0,${height - margin.bottom})`)
-      .call(xAxis);
+      .call(xAxis)
+      .selectAll("text")
+      .attr("transform", "rotate(-90)")
+      .style("text-anchor", "end")
+      .attr("dx", "-4.0em")
+      .attr("dy", "-0.5em");
 
     svg
       .append("g")
@@ -54,8 +61,31 @@ const BarChart = ({ xData, yData }) => {
       .attr("y", (d) => yScale(d))
       .attr("width", xScale.bandwidth())
       .attr("height", (d) => height - margin.bottom - yScale(d))
-      .attr("fill", "#3498db");
-  }, [xData, yData]);
+      .attr("fill", "#3498db")
+      .on("click", function (event, d, i) {
+        const index = yData.indexOf(d);
+        const label = xData[index];
+
+        // Reset all bars
+        svg
+          .selectAll("rect")
+          .transition()
+          .duration(200)
+          .style("opacity", 0.6)
+          .attr("stroke", "none");
+
+        // Highlight the clicked bar
+        d3.select(this)
+          .transition()
+          .duration(200)
+          .style("opacity", 1)
+          .attr("stroke", "orange")
+          .attr("stroke-width", 3);
+
+        // Optional: show toast
+        toast.info(`Cashier: ${label} | Value: ${d}`);
+      });
+  }, [xData, yData, isDarkMode]);
 
   return <svg ref={svgRef}></svg>;
 };

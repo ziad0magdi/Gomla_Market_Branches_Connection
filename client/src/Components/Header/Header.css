@@ -33,7 +33,7 @@
 
 /* Right Section */
 .Header_right {
-  display: flex;
+  display: block;
   align-items: center;
   gap: 15px; /* Spacing between elements */
 }
@@ -114,6 +114,7 @@
 
   .Header_right {
     flex-direction: column;
+    width: 40%;
     gap: 10px;
   }
 }

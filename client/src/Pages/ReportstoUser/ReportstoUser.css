@@ -36,3 +36,26 @@
   width: 25%;
   height: 4%;
 }
+.ReportstoUser_Selector {
+  width: 15%;
+  justify-self: center;
+}
+
+@media (max-width: 768px) {
+  .ReportstoUser_container {
+    flex-direction: column;
+    width: 10px;
+    background-color: #f9f9f9;
+    color: #333;
+    margin: 0;
+  }
+  .ReportstoUser_button {
+    min-height: 5%;
+    min-width: 50%;
+  }
+  .ReportstoUser_Selector {
+    width: 54%;
+    justify-self: center;
+    color: #333;
+  }
+}
