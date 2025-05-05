@@ -32,7 +32,7 @@ const NavBar = () => {
           </Link>
         )}
 
-        {Number(userGroup) === 1 && (
+        {Number(userGroup) !== 3 && (
           <Link className="NavBar_link_item" to="/ReportToUser">
             <li className="NavBar_item">
               {language === "en"

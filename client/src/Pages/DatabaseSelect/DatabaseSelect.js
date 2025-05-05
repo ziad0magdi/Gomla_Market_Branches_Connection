@@ -28,6 +28,7 @@ const DatabaseSelect = () => {
   const [showReport, setShowReport] = useState(false);
   const [Reports, setReports] = useState([]);
   const [selectedReport, setSelectedReport] = useState();
+  const [selectedReportName, setSelectedReportName] = useState("");
   useEffect(() => {
     const fetchData = async () => {
       if (!user_Id) return null;
@@ -57,6 +58,8 @@ const DatabaseSelect = () => {
   };
   const onSelect2 = (Report) => {
     setSelectedReport(Report);
+    const report = Reports.find((item) => item.report_id === Number(Report));
+    setSelectedReportName(report?.report_name);
   };
 
   return (
@@ -116,6 +119,7 @@ const DatabaseSelect = () => {
           database_id={selectedDatabase}
           report_id={selectedReport}
           filters={userName}
+          reportHeder={selectedReportName}
           date={dateFrom}
         />
       )}

@@ -14,10 +14,15 @@ const ReportstoUser = () => {
   const [selectedUser, setSelectedUser] = useState();
   useEffect(() => {
     const fetchDatabases = async () => {
-      if (!userGroup || userGroup !== 1) return null;
+      if (!userGroup || userGroup === 3) return null;
       try {
-        const response1 = await ReportAPI.AllReport();
-        setReports(response1.data);
+        if (Number(userGroup) === 1) {
+          const response1 = await ReportAPI.AllReport();
+          setReports(response1.data);
+        } else {
+          const response1 = await ReportAPI.UsersReport(user_Id);
+          setReports(response1.data);
+        }
         const response2 = await UserAPI.getUser();
         setUsers(response2.data);
       } catch (error) {

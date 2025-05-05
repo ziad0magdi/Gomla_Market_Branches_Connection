@@ -98,3 +98,4 @@ select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME like '%cashflow%'
 
 -- Cashflow_type = 1 يسلم فلوس
 -- Cashflow_type = 2 يستلم فلوس
+

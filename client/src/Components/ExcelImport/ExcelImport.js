@@ -1,7 +1,7 @@
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
-const exportToExcel = (data) => {
+const exportToExcel = (data, heder, date) => {
   const worksheet = XLSX.utils.json_to_sheet(data);
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(workbook, worksheet, "Report");
@@ -15,7 +15,7 @@ const exportToExcel = (data) => {
     type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   });
 
-  saveAs(dataBlob, "report.xlsx");
+  saveAs(dataBlob, `${heder} ${date}.xlsx`);
 };
 
 export default exportToExcel;

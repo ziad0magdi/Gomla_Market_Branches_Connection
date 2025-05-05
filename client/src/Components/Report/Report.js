@@ -2,14 +2,13 @@ import { React, useEffect, useState, useCallback } from "react";
 import BranchAPI from "../../APIs/BrancheAPI";
 import { useUser } from "../../context/UserContext";
 import Button from "../Button/Button";
-
 import exportToExcel from "../ExcelImport/ExcelImport";
 import Selector from "../Selector/Selector";
 import BarChart from "../Charts/BarChart";
-import PieChart from "../Charts/PieChart";
+// import PieChart from "../Charts/PieChart";
 import "./Report.css";
 
-const Report = ({ database_id, report_id, filters, date }) => {
+const Report = ({ database_id, report_id, reportHeder, filters, date }) => {
   const { language, isDarkMode, user_Id } = useUser();
   const [data, setData] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
@@ -19,10 +18,10 @@ const Report = ({ database_id, report_id, filters, date }) => {
       Chart_id: 1,
       Chart_name: "Bar Chart",
     },
-    {
-      Chart_id: 2,
-      Chart_name: "Pie Chart",
-    },
+    // {
+    //   Chart_id: 2,
+    //   Chart_name: "Pie Chart",
+    // },
   ]);
 
   const [selectedChart, setSelectedChart] = useState(null);
@@ -211,32 +210,35 @@ const Report = ({ database_id, report_id, filters, date }) => {
         <div className="Report_button">
           <Button
             text={language === "en" ? "Export to Excel" : "تصدير إلى Excel"}
-            onClick={() => exportToExcel(data)}
+            onClick={() => exportToExcel(data, reportHeder, date)}
           />
         </div>
-
-        <Selector
-          headerText={language === "en" ? "Select Chart" : "اختر الرسم البياني"}
-          selectorValues={charts}
-          onSelect={setSelectedChart}
-          selectedValue={selectedChart}
-        />
-
-        {selectedChart && (
+        <div className="Report_Selector">
           <Selector
             headerText={
-              language === "en"
-                ? "Select Chart Y Axis"
-                : "اختر محور Y للرسم البياني"
+              language === "en" ? "Select Chart" : "اختر الرسم البياني"
             }
-            selectorValues={Object.keys(data[0]).map((key, index) => ({
-              index,
-              key,
-            }))}
-            onSelect={onSelectFild}
-            selectedValue={selectedFild}
+            selectorValues={charts}
+            onSelect={setSelectedChart}
+            selectedValue={selectedChart}
           />
-        )}
+
+          {selectedChart && (
+            <Selector
+              headerText={
+                language === "en"
+                  ? "Select Chart Y Axis"
+                  : "اختر محور Y للرسم البياني"
+              }
+              selectorValues={Object.keys(data[0]).map((key, index) => ({
+                index,
+                key,
+              }))}
+              onSelect={onSelectFild}
+              selectedValue={selectedFild}
+            />
+          )}
+        </div>
         <div className="Report_button">
           {selectedFild && (
             <Button
@@ -248,7 +250,7 @@ const Report = ({ database_id, report_id, filters, date }) => {
         {showChart && (
           <div className="Report_chart">
             {selectedChart === "1" && <BarChart xData={xData} yData={yData} />}
-            {selectedChart === "2" && <PieChart data={xData} labels={yData} />}
+            {/* {selectedChart === "2" && <PieChart labels={xData} data={yData} />} */}
           </div>
         )}
       </div>
