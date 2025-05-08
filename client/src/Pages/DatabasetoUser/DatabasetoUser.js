@@ -5,7 +5,7 @@ import UserAPI from "../../APIs/UserAPI";
 import { useUser } from "../../context/UserContext";
 import Selector from "../../Components/Selector/Selector";
 import Button from "../../Components/Button/Button";
-import TextInput from "../../Components/Inputs/TextInput";
+import Input from "../../Components/Inputs/Input";
 import "./DatabasetoUser.css";
 
 const DatabasetoUser = () => {
@@ -87,13 +87,15 @@ const DatabasetoUser = () => {
 
       {selectedDatabase && (
         <div className="DatabasetoUser_input">
-          <TextInput
+          <Input
+            type="text"
             placeholder={
               language === "en" ? "Branch userName" : "اسم المستخدم للفرع"
             }
             setData={setUserName}
           />
-          <TextInput
+          <Input
+            type="text"
             placeholder={
               language === "en" ? "Branch Password" : "كلمة مرور الفرع"
             }

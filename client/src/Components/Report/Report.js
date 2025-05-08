@@ -80,7 +80,6 @@ const Report = ({ database_id, report_id, reportHeder, filters, date }) => {
       }
     }
     if (selectedKey) {
-      // Map the corresponding values from the data
       const yValues = data.map((item) => item[selectedKey]);
       setYData(yValues);
     }

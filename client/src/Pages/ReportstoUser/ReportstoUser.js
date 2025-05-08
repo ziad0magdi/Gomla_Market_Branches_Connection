@@ -45,11 +45,6 @@ const ReportstoUser = () => {
           ? "Branch added to the user successfully"
           : "تمت إضافة الفرع للمستخدم بنجاح"
       );
-      alert(
-        language === "en"
-          ? "Branch added to the user successfully"
-          : "تمت إضافة الفرع للمستخدم بنجاح"
-      );
     }
   };
 

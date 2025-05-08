@@ -9,7 +9,6 @@ class authController {
   static async signIn(req, res) {
     const { user_email, user_password } = req.body;
     try {
-      // Fetch user by email
       const results = await UsersModel.getUserByEmail(user_email);
 
       if (!results) {
@@ -17,44 +16,30 @@ class authController {
       }
 
       const results2 = await UsersModel.getUserPasswordByEmail(user_email);
-
-      const user_Query_password = results2;
-
-      // Compare hashed password with bcrypt
       const isPasswordValid = await bcrypt.compare(
         user_password,
-        user_Query_password.user_password
+        results2.user_password
       );
-
       if (!isPasswordValid) {
         return res.status(401).json({ Error: "Invalid email or password" });
       }
-
       const results3 = await UsersModel.getUserInfoByEmail(user_email);
-
-      const user = results3;
-
-      // Generate JWT token
       const token = jwt.sign(
-        { user_id: user.user_id, user_group_id: user.user_group_id },
+        { user_id: results3.user_id, user_group_id: results3.user_group_id },
         JWT_SECRET,
         { expiresIn: "1h" }
       );
-
-      // Set token in HTTP-only cookie
       res.cookie("authToken", token, {
         httpOnly: true,
         secure: true,
         sameSite: "None",
-        maxAge: 3600000, // 1 hour in milliseconds
+        maxAge: 3600000,
       });
-
-      // Respond with success and user details
       return res.status(200).json({
         Status: "Success",
-        user_group_id: user.user_group_id,
-        user_id: user.user_id,
-        user_department_id: user.user_department_id,
+        user_group_id: results3.user_group_id,
+        user_id: results3.user_id,
+        user_department_id: results3.user_department_id,
       });
     } catch (err) {
       console.error("Error during sign-in:", err);

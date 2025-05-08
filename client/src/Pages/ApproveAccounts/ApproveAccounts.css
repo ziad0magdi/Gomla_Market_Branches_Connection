@@ -1,0 +1,138 @@
+.ApproveAccounts_container {
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  background-color: #f9f9f9;
+  color: #333;
+  margin: 0;
+}
+
+.ApproveAccounts_button {
+  width: 13%;
+  height: 7%;
+  padding-top: 1%;
+  display: flex;
+  justify-content: center;
+  justify-self: center;
+}
+.ApproveAccounts_container h1 {
+  margin: 0;
+}
+
+.ApproveAccounts_container.dark {
+  background-color: #2e2e2e;
+  color: #f1f1f1;
+}
+
+.ApproveAccounts_container h2 {
+  font-size: 24px;
+  color: #333;
+}
+
+.ApproveAccounts_input {
+  margin: 1%;
+  display: flex;
+  justify-self: center;
+  justify-content: space-between;
+  width: 25%;
+  height: 4%;
+}
+.ApproveAccounts_Selector {
+  width: 15%;
+  justify-self: center;
+}
+
+.ApproveAccounts_table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-weight: bold;
+  text-align: center;
+}
+
+.ApproveAccounts_table td,
+th {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+}
+.ApproveAccounts_table th {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  font-weight: bold;
+  font-size: large;
+}
+
+.ApproveAccounts_table_dark .ApproveAccounts_table td {
+  border-color: #444;
+}
+
+.ApproveAccounts_section {
+  text-align: start;
+  align-self: stretch;
+  padding: 20px;
+  border-right: 2px solid #ccc;
+}
+
+.MyBooks_dark .ApproveAccounts_section {
+  background-color: #161616;
+}
+
+.ApproveAccounts_section h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #ddd;
+}
+
+.ApproveAccounts_section .dark h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.ApproveAccounts_section ul {
+  list-style-type: none;
+  padding-top: 10px;
+}
+
+.ApproveAccounts_section ul li {
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #666;
+  transition: 0.3s;
+  margin-bottom: 5px;
+  font-size: 1.1rem;
+}
+
+.ApproveAccounts_section ul li:hover,
+li.MyBooks_active {
+  background-color: #c76824;
+  color: white !important;
+}
+
+.ApproveAccounts_second_container {
+  display: flex;
+}
+.ApproveAccounts_main {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .ApproveAccounts_button {
+    min-height: 5%;
+    min-width: 50%;
+  }
+
+  .ApproveAccounts_input {
+    display: flex;
+    justify-self: center;
+    justify-content: space-between;
+    width: 90%;
+    height: 4%;
+  }
+  .ApproveAccounts_Selector {
+    width: 54%;
+    justify-self: center;
+    color: #333;
+  }
+}

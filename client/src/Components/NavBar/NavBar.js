@@ -33,6 +33,15 @@ const NavBar = () => {
         )}
 
         {Number(userGroup) !== 3 && (
+          <Link className="NavBar_link_item" to="/ApproveAccounts">
+            <li className="NavBar_item">
+              {language === "en"
+                ? "Approve Accounts"
+                : "الموافقة علي  الحسابات"}
+            </li>
+          </Link>
+        )}
+        {Number(userGroup) !== 3 && (
           <Link className="NavBar_link_item" to="/ReportToUser">
             <li className="NavBar_item">
               {language === "en"

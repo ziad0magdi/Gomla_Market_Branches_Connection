@@ -1,4 +1,5 @@
 import axios from "./axios";
+const GetAllBranchs = () => axios.post("/Branches");
 
 const Report1 = async (database_id, user_id, date) =>
   axios.post("/Report1", {
@@ -15,6 +16,7 @@ const Report2 = async (database_id, user_id, date) =>
   });
 
 const BranchAPI = {
+  GetAllBranchs,
   Report1,
   Report2,
 };

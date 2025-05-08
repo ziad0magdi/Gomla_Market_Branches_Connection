@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import CryptoJS from "crypto-js";
 import axios from "../../APIs/axios";
 import "./SignIn.css";
@@ -57,7 +58,11 @@ const SignIn = () => {
         setUserDepartment(res.data.user_department_id);
         navigate("/DatabaseSelect", { replace: true });
       } else {
-        alert("Invalid email or password.");
+        toast.error(
+          language === "en"
+            ? "Invalid email or password"
+            : "الايميل او كلمة المرور غير صحيحة"
+        );
       }
     } catch (err) {
       console.error(err);

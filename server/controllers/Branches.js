@@ -1,8 +1,8 @@
-const BeanchesModel = require("../Models/Branches");
+const BranchesModel = require("../Models/Branches");
 const DatabasesModel = require("../Models/Database");
 const selectedDB = require("../Config/SelectDatsbeas");
 
-class BeanchesController {
+class BranchesController {
   static async createConfig(database_id, user_id) {
     const database = await DatabasesModel.getSelectedUserDatabase(
       database_id,
@@ -24,6 +24,27 @@ class BeanchesController {
     return result;
   }
 
+  static async getAllBranches(req, res) {
+    try {
+      const branches = await BranchesModel.getAllBranches();
+      res.json(branches);
+    } catch (error) {
+      console.error("Error fetching branches:", error.message, error.stack);
+      res.status(500).json({ message: "Server Error", error: error.message });
+    }
+  }
+
+  static async getOneBranchess(req, res) {
+    const { Branches_name } = req.body;
+    try {
+      const Branches = await BranchesModel.getOneBranche(Branches_name);
+      res.json(Branches);
+    } catch (error) {
+      console.error("Error fetching Branchess:", error);
+      res.status(500).json({ message: "Server Error", error });
+    }
+  }
+
   static async getCashirInfo(req, res) {
     const database_id = req.body.database_id;
     const user_id = Number(req.body.user_id);
@@ -41,12 +62,12 @@ class BeanchesController {
     }
 
     try {
-      const result = await BeanchesController.createConfig(
+      const result = await BranchesController.createConfig(
         database_id,
         user_id
       );
       if (result) {
-        const Cashirs = await BeanchesModel.getCashirInfo(result, fullDate);
+        const Cashirs = await BranchesModel.getCashirInfo(result, fullDate);
         res.json(Cashirs);
       } else {
         res.json({
@@ -75,12 +96,12 @@ class BeanchesController {
     }
 
     try {
-      const result = await BeanchesController.createConfig(
+      const result = await BranchesController.createConfig(
         database_id,
         user_id
       );
       if (result) {
-        const Cashirs = await BeanchesModel.TotalCashierDeficitsAndIncreases(
+        const Cashirs = await BranchesModel.TotalCashierDeficitsAndIncreases(
           result,
           fullDate
         );
@@ -98,4 +119,4 @@ class BeanchesController {
   }
 }
 
-module.exports = BeanchesController;
+module.exports = BranchesController;

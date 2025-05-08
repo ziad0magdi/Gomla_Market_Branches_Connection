@@ -7,5 +7,12 @@ const UsersController = require("../controllers/User");
 
 router.post("/Users", asyncHandler(UsersController.getAllUsers));
 router.post("/User", asyncHandler(UsersController.addUser));
+router.post(
+  "/Employee",
+  asyncHandler(UsersController.GetAllEmployeeWithSpacificUser)
+);
+router.post("/ApproveAccounts", asyncHandler(UsersController.ApproveAccounts));
+router.post("/DeclineAccounts", asyncHandler(UsersController.DeclineAccounts));
+router.post("/ChangePassword", asyncHandler(UsersController.ChangePassword));
 
 module.exports = router;

@@ -1,7 +1,19 @@
 const QueryEx = require("../Config/QueryEx");
 const db = require("../Config/db");
-const bcrypt = require("bcryptjs");
-class BeanchesModel {
+class BranchesModel {
+  /*------------------------GET All Branchs-------------------------*/
+  static async getAllBranches() {
+    let dbconfig;
+    dbconfig = db.primaryConfig;
+    try {
+      const query = "SELECT * FROM branches";
+      const result = await QueryEx.executeQuery(dbconfig, query);
+      return result.recordset;
+    } catch (err) {
+      console.error("Error fetching Branches:", err);
+      throw err;
+    }
+  }
   /*----------------------------Get All Users----------------------------------*/
   static async getCashirInfo(selectedDBConfig, date) {
     let dbconfig;
@@ -125,4 +137,4 @@ ORDER BY
   }
 }
 
-module.exports = BeanchesModel;
+module.exports = BranchesModel;
