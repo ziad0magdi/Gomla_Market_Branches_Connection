@@ -14,7 +14,6 @@ const DatabasetoUser = () => {
   const [selectedDatabase, setSelectedDatabase] = useState();
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(user_Id);
-  const [selectedUserBranches, setSelectedUserBranches] = useState();
   const [userName, setUserName] = useState("");
   const [userPassword, setUserPassword] = useState("");
 

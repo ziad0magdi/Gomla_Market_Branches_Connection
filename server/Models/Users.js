@@ -3,7 +3,40 @@ const db = require("../Config/db");
 
 class UsersModel {
   /*----------------------------Get All Users----------------------------------*/
-  static async getAllUsers(selectedDBConfig) {
+  static async getAllUsers(user_Id) {
+    let dbconfig;
+    dbconfig = db.primaryConfig;
+    try {
+      const query = `SELECT 
+user_id, 
+user_fname + ' ' + user_lname AS 'Employee_Full_Name',
+user_phone,
+user_email,
+B.branch_name,
+D.department_name, 
+UG.group_role,
+isApproved
+FROM users AS U
+INNER JOIN departments AS D 
+ON U.user_department_id = D.department_id
+INNER JOIN branches AS B
+ON U.user_branch_id = B.branch_id
+INNER JOIN users_groups AS UG
+ON U.user_group_id = UG.group_id
+WHERE user_Id <> @user_Id`;
+      const params = {
+        user_Id: user_Id,
+      };
+      const result = await QueryEx.executeQuery(dbconfig, query, params);
+      return result.recordset;
+    } catch (err) {
+      console.error("Error fetching all users:", err);
+      throw err;
+    }
+  }
+
+  /*----------------------------Get All Users Approved----------------------------------*/
+  static async getApprovedUsers(selectedDBConfig) {
     let dbconfig;
     if (selectedDBConfig) {
       dbconfig = selectedDBConfig;
@@ -11,9 +44,23 @@ class UsersModel {
       dbconfig = db.primaryConfig;
     }
     try {
-      const query = "SELECT * FROM users";
+      const query = `SELECT 
+user_id, 
+user_fname,
+user_lname,
+user_phone,
+user_email,
+B.branch_name,
+D.department_name, 
+user_group_id
+FROM users AS U
+INNER JOIN departments AS D 
+ON U.user_department_id = D.department_id
+INNER JOIN branches AS B
+ON U.user_branch_id = B.branch_id
+WHERE isApproved = 'y'`;
       const result = await QueryEx.executeQuery(dbconfig, query);
-      return result.recordset; // Return all users
+      return result.recordset;
     } catch (err) {
       console.error("Error fetching all users:", err);
       throw err;
@@ -24,7 +71,7 @@ class UsersModel {
     let dbconfig;
     dbconfig = db.primaryConfig;
     try {
-      const query = "SELECT * FROM users WHERE user_id = @user_id";
+      const query = `"SELECT * FROM users WHERE user_id = @user_id"`;
       const params = { user_id: userId };
       const result = await QueryEx.executeQuery(dbconfig, query, params);
       return result.recordset[0]; // Return a single user
@@ -156,6 +203,7 @@ class UsersModel {
       throw err;
     }
   }
+
   /*----------------------------Get All Employee In the same Department as the Manager-----------------------------*/
   static async GetAllEmployeeWithSpacificUser(user_id) {
     let dbconfig;
@@ -183,6 +231,34 @@ WHERE (user_department_id = (SELECT user_department_id FROM users WHERE user_id 
       throw err;
     }
   }
+  /*----------------------------Get All Approve Employee In the same Department as the Manager-----------------------------*/
+  static async GetApprovedEmployeeWithSpacificUser(user_id) {
+    let dbconfig;
+    dbconfig = db.primaryConfig;
+    try {
+      const query = `SELECT 
+      U.user_id,
+      U.user_fname + ' ' + user_lname AS 'Employee_Full_Name',
+      U.user_phone,
+      U.isApproved,
+	  UG.group_role
+FROM users AS U
+INNER JOIN users_groups AS UG
+ON U.user_group_id = UG.group_id
+WHERE (user_department_id = (SELECT user_department_id FROM users WHERE user_id = @user_id)
+ AND user_branch_id = (SELECT user_branch_id FROM users WHERE user_id = @user_id) AND isApproved = 'y')
+  AND user_id <> @user_id `;
+      const params = {
+        user_id: user_id,
+      };
+      const result = await QueryEx.executeQuery(dbconfig, query, params);
+      return result.recordset;
+    } catch (error) {
+      console.error("Error fetching users:", err);
+      throw err;
+    }
+  }
+
   /*----------------------------Approve New Employees Accounts By the Manger----------------------------------*/
   static async ApproveAccounts(user_id) {
     let dbconfig;

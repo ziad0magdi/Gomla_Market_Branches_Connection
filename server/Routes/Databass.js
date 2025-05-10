@@ -11,6 +11,14 @@ router.post(
   asyncHandler(DatabasesController.getAllUserDatabases)
 );
 router.post(
+  "/UserAvailableDatabases",
+  asyncHandler(DatabasesController.getUserAvailableDatabases)
+);
+router.post(
+  "/UserAvailableDatabasesManager",
+  asyncHandler(DatabasesController.getUserAvailableDatabasesForManager)
+);
+router.post(
   "/SelectedDatabase",
   asyncHandler(DatabasesController.getSelectedUserDatabase)
 );

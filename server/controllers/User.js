@@ -25,30 +25,19 @@ class UsersController {
   }
 
   static async getAllUsers(req, res) {
-    const database_id = req.body.database_id;
-    const user_id = Number(req.body.user_id);
+    const user_Id = req.body.user_Id;
     try {
-      if (database_id) {
-        const result = await UsersController.createConfig(database_id, user_id);
-        if (result) {
-          try {
-            const Users = await UsersModel.getAllUsers(result);
-            res.json(Users);
-          } catch (error) {
-            return res.status(401).json({
-              Status: "Access_Denied",
-            });
-          }
-        } else {
-          res.json({
-            Status: "NoAccess",
-            Message: "user have no Access to this database",
-          });
-        }
-      } else {
-        const Users = await UsersModel.getAllUsers();
-        res.json(Users);
-      }
+      const Users = await UsersModel.getAllUsers(user_Id);
+      res.json(Users);
+    } catch (error) {
+      console.error("Error fetching Users:", error);
+      res.status(500).json({ message: "Server Error", error });
+    }
+  }
+  static async getApprovedUsers(req, res) {
+    try {
+      const Users = await UsersModel.getApprovedUsers();
+      res.json(Users);
     } catch (error) {
       console.error("Error fetching Users:", error);
       res.status(500).json({ message: "Server Error", error });
@@ -141,16 +130,31 @@ class UsersController {
       return res.status(500).json({ message: "Server Error", error });
     }
   }
+
   static async GetAllEmployeeWithSpacificUser(req, res) {
     const { user_Id } = req.body;
     try {
       const User = await UsersModel.GetAllEmployeeWithSpacificUser(user_Id);
-      return res.status(200).json({ Status: true, User });
+      return res.status(200).json(User);
     } catch (error) {
       console.error("Error fetching Users:", error);
       res.status(500).json({ message: "Server Error", error });
     }
   }
+
+  static async GetApprovedEmployeeWithSpacificUser(req, res) {
+    const { user_Id } = req.body;
+    try {
+      const User = await UsersModel.GetApprovedEmployeeWithSpacificUser(
+        user_Id
+      );
+      return res.status(200).json(User);
+    } catch (error) {
+      console.error("Error fetching Users:", error);
+      res.status(500).json({ message: "Server Error", error });
+    }
+  }
+
   static async ApproveAccounts(req, res) {
     try {
       const user_id = Number(req.body.user_id);
@@ -163,6 +167,7 @@ class UsersController {
   }
   static async DeclineAccounts(req, res) {
     const user_id = Number(req.body.user_id);
+    console.log(user_id);
     try {
       const Decline = await UsersModel.DeclineAccounts(user_id);
       return res.status(200).json({ success: true });

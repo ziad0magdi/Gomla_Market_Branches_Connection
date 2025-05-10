@@ -43,6 +43,66 @@ WHERE U.user_id = @user_id`;
     }
   }
 
+  /*----------------------------Get All User's Avilabe Databases----------------------------------*/
+  static async getUserAvailableDatabases(user_id) {
+    let dbconfig;
+    dbconfig = db.primaryConfig;
+    try {
+      const query = `SELECT 
+branch_id,
+branch_name 
+FROM branches 
+WHERE 
+branch_id NOT IN (SELECT 
+B.branch_id
+FROM branches AS B
+LEFT JOIN users_branches AS UB
+ON UB.branch_id = B.branch_id
+WHERE UB.user_id = @user_id)`;
+      const params = {
+        user_id: user_id,
+      };
+      const result = await QueryEx.executeQuery(dbconfig, query, params);
+      return result.recordset;
+    } catch (err) {
+      console.error("Error Fetching User Avilabe Databases:", err);
+      throw err;
+    }
+  }
+
+  /*----------------------------Get All User's Avilabe Databases (Manager Editon)----------------------------------*/
+  static async getUserAvailableDatabasesForManager(user_id, m_user_id) {
+    let dbconfig;
+    dbconfig = db.primaryConfig;
+    try {
+      const query = `SELECT 
+branch_id,
+branch_name 
+FROM branches 
+WHERE 
+branch_id NOT IN (SELECT 
+B.branch_id
+FROM branches AS B
+LEFT JOIN users_branches AS UB
+ON UB.branch_id = B.branch_id
+WHERE UB.user_id = @user_id) AND branch_id IN (SELECT 
+B.branch_id
+FROM branches AS B
+LEFT JOIN users_branches AS UB
+ON UB.branch_id = B.branch_id
+WHERE UB.user_id = @m_user_id)`;
+      const params = {
+        user_id: user_id,
+        m_user_id: m_user_id,
+      };
+      const result = await QueryEx.executeQuery(dbconfig, query, params);
+      return result.recordset;
+    } catch (err) {
+      console.error("Error Fetching User Avilabe Databases:", err);
+      throw err;
+    }
+  }
+
   /*----------------------------Get All Database Info----------------------------------*/
   static async getSelectedDatabase(branch_id) {
     let dbconfig;

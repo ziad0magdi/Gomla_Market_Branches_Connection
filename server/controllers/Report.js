@@ -22,6 +22,30 @@ class ReportController {
     }
   }
 
+  static async getUserAvailableReports(req, res) {
+    const user_id = Number(req.body.user_id);
+    try {
+      const Reports = await ReportsModel.getUserAvailableReports(user_id);
+      res.json(Reports);
+    } catch (error) {
+      console.error("Error fetching User Available Reports:", error);
+      res.status(500).json({ message: "Server Error", error });
+    }
+  }
+
+  static async getUserAvailableReportsManager(req, res) {
+    const user_id = Number(req.body.user_id);
+    try {
+      const Reports = await ReportsModel.getUserAvailableReportsManager(
+        user_id
+      );
+      res.json(Reports);
+    } catch (error) {
+      console.error("Error fetching User Available Reports:", error);
+      res.status(500).json({ message: "Server Error", error });
+    }
+  }
+
   static async addReportToUser(req, res) {
     const report_id = Number(req.body.report_id);
     const user_id = Number(req.body.user_id);

@@ -51,6 +51,7 @@ class DatabasesController {
       res.status(500).json({ message: "Server Error", error });
     }
   }
+
   static async getAllUserDatabases(req, res) {
     const user_id = Number(req.body.user_id);
     try {
@@ -58,6 +59,33 @@ class DatabasesController {
       res.json(databases);
     } catch (error) {
       console.error("Error fetching User Databases:", error);
+      res.status(500).json({ message: "Server Error", error });
+    }
+  }
+
+  static async getUserAvailableDatabases(req, res) {
+    const user_id = Number(req.body.user_id);
+    try {
+      const databases = await DatabasesModel.getUserAvailableDatabases(user_id);
+      res.json(databases);
+    } catch (error) {
+      console.error("Error fetching User Available Databases:", error);
+      res.status(500).json({ message: "Server Error", error });
+    }
+  }
+
+  static async getUserAvailableDatabasesForManager(req, res) {
+    const user_id = Number(req.body.user_id);
+    const m_user_id = Number(req.body.m_user_id);
+    try {
+      const databases =
+        await DatabasesModel.getUserAvailableDatabasesForManager(
+          user_id,
+          m_user_id
+        );
+      res.json(databases);
+    } catch (error) {
+      console.error("Error fetching User Available Databases:", error);
       res.status(500).json({ message: "Server Error", error });
     }
   }

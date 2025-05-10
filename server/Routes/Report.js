@@ -6,6 +6,14 @@ const ReportController = require("../controllers/Report");
 
 router.post("/Reports", asyncHandler(ReportController.getAllReports));
 router.post("/UserReports", asyncHandler(ReportController.getUserReports));
+router.post(
+  "/UserAvailableReports",
+  asyncHandler(ReportController.getUserAvailableReports)
+);
+router.post(
+  "/UserAvailableReportsManager",
+  asyncHandler(ReportController.getUserAvailableReportsManager)
+);
 router.post("/ReportToUser", asyncHandler(ReportController.addReportToUser));
 
 module.exports = router;

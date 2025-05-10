@@ -17,23 +17,9 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      console.log("Incoming origin:", origin);
-
-      if (!origin) return callback(null, true);
-
-      const allowedPattern =
-        /^http:\/\/(localhost|10\.110\.\d{1,3}\.\d{1,3}):[34]00[01]$/;
-
-      if (allowedPattern.test(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-
-    methods: ["POST", "GET", "DELETE", "PUT"],
-    credentials: true,
+    origin: true, // Allow all origins
+    credentials: true, // Allow cookies
+    methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );
 
@@ -46,6 +32,8 @@ fs.readdirSync(routesPath).forEach((file) => {
     app.use("/", route);
   }
 });
+
+app.use(express.static(path.join(__dirname, "../client/build")));
 
 // Start the server
 app.listen(PORT, "0.0.0.0", () => {

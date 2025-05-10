@@ -37,6 +37,52 @@ WHERE UR.user_id = @user_id`;
     }
   }
 
+  /*----------------------------Get All User Available Reports----------------------------------*/
+  static async getUserAvailableReports(user_id) {
+    let dbconfig;
+    dbconfig = db.primaryConfig;
+    try {
+      const query = `SELECT report_id, report_name FROM reports WHERE report_id NOT IN (SELECT 
+R.report_id
+FROM reports AS R 
+INNER JOIN users_reports AS UR
+ON R.report_id = UR.report_id
+WHERE UR.user_id = @user_id)`;
+      const params = { user_id: user_id };
+      const result = await QueryEx.executeQuery(dbconfig, query, params);
+      return result.recordset;
+    } catch (err) {
+      console.error("Error fetching User Available Reports:", err);
+      throw err;
+    }
+  }
+
+  /*----------------------------Get All User Available Reports Manager Edition----------------------------------*/
+  static async getUserAvailableReportsManager(user_id, m_user_id) {
+    let dbconfig;
+    dbconfig = db.primaryConfig;
+    try {
+      const query = `SELECT report_id, report_name FROM reports WHERE report_id NOT IN (SELECT 
+R.report_id
+FROM reports AS R 
+INNER JOIN users_reports AS UR
+ON R.report_id = UR.report_id
+WHERE UR.user_id = @user_id) AND report_id IN (SELECT 
+R.report_id
+FROM reports AS R 
+INNER JOIN users_reports AS UR
+ON R.report_id = UR.report_id
+WHERE UR.user_id = @m_user_id
+)`;
+      const params = { user_id: user_id, m_user_id: m_user_id };
+      const result = await QueryEx.executeQuery(dbconfig, query, params);
+      return result.recordset;
+    } catch (err) {
+      console.error("Error fetching User Available Reports:", err);
+      throw err;
+    }
+  }
+
   /*----------------------------Add Report to user----------------------------------*/
   static async addReportToUser(report_id, user_id) {
     let dbconfig;
