@@ -62,8 +62,8 @@ const ProtectedRoute = ({ Component }) => {
   const { isLogin, userGroup } = useUser();
 
   const restrictedRoutes = {
-    "/DatabasetoUser": [1],
-    "/ReportToUser": [1, 2],
+    "/DatabasetoUser": [1, 2],
+    "/ReportToUser": [1],
     "/ApproveAccounts": [1, 2],
     "/DatabaseSelect": [1, 2, 3],
   };

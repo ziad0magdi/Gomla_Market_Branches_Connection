@@ -3,7 +3,6 @@ import "./Selector.css";
 
 function Selector({ headerText, selectorValues, onSelect, selectedValue }) {
   const { language, isDarkMode } = useUser();
-
   return (
     <div className={`Selector_container ${isDarkMode ? "dark" : ""}`}>
       <h3>{headerText}</h3>

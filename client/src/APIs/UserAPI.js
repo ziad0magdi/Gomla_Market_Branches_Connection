@@ -1,6 +1,9 @@
 import axios from "./axios";
 
-const getUser = async () => axios.post("/Users");
+const getUser = async (user_Id) => axios.post("/Users", { user_Id: user_Id });
+
+const getApprovedUsers = async () => axios.post("/ApprovedUsers");
+
 const AddUser = (
   user_fname,
   user_lname,
@@ -23,6 +26,9 @@ const AddUser = (
 const GetAllEmployeeWithSpacificUser = (user_Id) =>
   axios.post("/Employee", { user_Id: user_Id });
 
+const GetApprovedEmployeeWithSpacificUser = (user_Id) =>
+  axios.post("/ApprovedEmployee", { user_Id: user_Id });
+
 const ApproveAccounts = (user_id) =>
   axios.post("/ApproveAccounts", { user_id: user_id });
 
@@ -31,8 +37,10 @@ const DeclineAccounts = (user_id) =>
 
 const UserAPI = {
   getUser,
+  getApprovedUsers,
   AddUser,
   GetAllEmployeeWithSpacificUser,
+  GetApprovedEmployeeWithSpacificUser,
   ApproveAccounts,
   DeclineAccounts,
 };

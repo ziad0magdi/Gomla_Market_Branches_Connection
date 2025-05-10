@@ -4,7 +4,7 @@ import UserAPI from "../../APIs/UserAPI";
 import { useUser } from "../../context/UserContext";
 import Button from "../../Components/Button/Button";
 const ApproveAccounts = () => {
-  const { isDarkMode, language, user_Id } = useUser();
+  const { isDarkMode, language, user_Id, userGroup } = useUser();
   const [selectedOption, setSelectedOption] = useState("All_Employees");
   const [allEmployees, setAllEmployees] = useState([]);
   const [waitingEmployees, setWaitingEmployees] = useState([]);
@@ -14,14 +14,29 @@ const ApproveAccounts = () => {
     const fetchData = async () => {
       try {
         if (!user_Id) return;
-        const response = await UserAPI.GetAllEmployeeWithSpacificUser(user_Id);
-        setAllEmployees(response.data.User);
-        setApproveEmployees(
-          response.data.User.filter((user) => user.isApproved === "y")
-        );
-        setWaitingEmployees(
-          response.data.User.filter((user) => user.isApproved === "n")
-        );
+        if (Number(userGroup) === 1) {
+          const response = await UserAPI.getUser(user_Id);
+          setAllEmployees(response.data);
+          setApproveEmployees(
+            response.data.filter((user) => user.isApproved === "y")
+          );
+          setWaitingEmployees(
+            response.data.filter((user) => user.isApproved === "n")
+          );
+        } else if (userGroup === 2) {
+          const response = await UserAPI.GetAllEmployeeWithSpacificUser(
+            user_Id
+          );
+          setAllEmployees(response.data);
+          setApproveEmployees(
+            response.data.filter((user) => user.isApproved === "y")
+          );
+          setWaitingEmployees(
+            response.data.filter((user) => user.isApproved === "n")
+          );
+        } else {
+          return null;
+        }
       } catch (error) {
         console.log("Error fetching data:", error);
       }
@@ -42,48 +57,115 @@ const ApproveAccounts = () => {
     UserAPI.DeclineAccounts(user_id);
     window.location.reload();
   };
+  console.log("allEmployees", allEmployees);
   const renderEmployees = (Employees, sectionTitleEn, sectionTitleAr) => {
     return (
       <div className="ApproveAccounts_section">
         <h2>{language === "en" ? sectionTitleEn : sectionTitleAr}</h2>
         {Employees.length > 0 ? (
-          <table className="ApproveAccounts_table">
-            <tr>
-              <th>
-                {language === "en" ? "Employee Full Name" : "إسم الموظف الكامل"}
-              </th>
-              <th>{language === "en" ? "Employee Phone" : "رقم الموظف"}</th>
-              <th>{language === "en" ? "Employee Role" : "دور الموظف"}</th>
-              <th>{language === "en" ? "Employee State" : "حالة الموظف"}</th>
-            </tr>
-            {Employees.map((employee) => (
-              <tr>
-                <td>{employee.Employee_Full_Name}</td>
-                <td>{employee.user_phone}</td>
-                <td>{employee.group_role}</td>
-                <td>
-                  {employee.isApproved === "y" ? (
-                    language === "en" ? (
-                      "Approve"
-                    ) : (
-                      "تم الموافقة عليه"
-                    )
-                  ) : (
-                    <div className="ApproveAccounts_Button">
-                      <Button
-                        text={language === "en" ? "Approve" : "موافق"}
-                        onClick={() => handleApprove(employee.user_id)}
-                      />
-                      <Button
-                        text={language === "en" ? "Decline" : "رفض"}
-                        onClick={() => handleDecline(employee.user_id)}
-                      />
-                    </div>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </table>
+          userGroup === 1 ? (
+            <table className="ApproveAccounts_table">
+              <thead>
+                <tr>
+                  <th>
+                    {language === "en"
+                      ? "Employee Full Name"
+                      : "إسم الموظف الكامل"}
+                  </th>
+                  <th>{language === "en" ? "Employee Phone" : "رقم الموظف"}</th>
+                  <th>
+                    {language === "en"
+                      ? "Employee Email"
+                      : "بريد الموظف الإلكتروني"}
+                  </th>
+                  <th>{language === "en" ? "Branch Name" : "إسم الفرع"}</th>
+                  <th>{language === "en" ? "Department Name" : "إسم القسم"}</th>
+                  <th>{language === "en" ? "Employee Role" : "دور الموظف"}</th>
+                  <th>
+                    {language === "en" ? "Employee State" : "حالة الموظف"}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {Employees.map((employee) => (
+                  <tr key={employee.user_id}>
+                    <td>{employee.Employee_Full_Name}</td>
+                    <td>{employee.user_phone}</td>
+                    <td>{employee.user_email}</td>
+                    <td>{employee.branch_name}</td>
+                    <td>{employee.department_name}</td>
+                    <td>{employee.group_role}</td>
+                    <td>
+                      {employee.isApproved === "y" ? (
+                        language === "en" ? (
+                          "Approve"
+                        ) : (
+                          "تم الموافقة عليه"
+                        )
+                      ) : (
+                        <div className="ApproveAccounts_Button">
+                          <Button
+                            text={language === "en" ? "Approve" : "موافق"}
+                            onClick={() => handleApprove(employee.user_id)}
+                          />
+                          <Button
+                            text={language === "en" ? "Decline" : "رفض"}
+                            onClick={() => handleDecline(employee.user_id)}
+                          />
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <table className="ApproveAccounts_table">
+              <thead>
+                <tr>
+                  <th>
+                    {language === "en"
+                      ? "Employee Full Name"
+                      : "إسم الموظف الكامل"}
+                  </th>
+                  <th>{language === "en" ? "Employee Phone" : "رقم الموظف"}</th>
+                  <th>{language === "en" ? "Employee Role" : "دور الموظف"}</th>
+                  <th>
+                    {language === "en" ? "Employee State" : "حالة الموظف"}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {Employees.map((employee) => (
+                  <tr key={employee.user_id}>
+                    <td>{employee.Employee_Full_Name}</td>
+                    <td>{employee.user_phone}</td>
+                    <td>{employee.group_role}</td>
+                    <td>
+                      {employee.isApproved === "y" ? (
+                        language === "en" ? (
+                          "Approve"
+                        ) : (
+                          "تم الموافقة عليه"
+                        )
+                      ) : (
+                        <div className="ApproveAccounts_Button">
+                          <Button
+                            text={language === "en" ? "Approve" : "موافق"}
+                            onClick={() => handleApprove(employee.user_id)}
+                          />
+                          <Button
+                            text={language === "en" ? "Decline" : "رفض"}
+                            onClick={() => handleDecline(employee.user_id)}
+                          />
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )
         ) : language === "en" ? (
           "No Employees"
         ) : (

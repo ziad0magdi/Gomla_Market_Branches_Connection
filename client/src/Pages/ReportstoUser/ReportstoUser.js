@@ -11,26 +11,37 @@ const ReportstoUser = () => {
   const [reports, setReports] = useState([]);
   const [selectedReport, setSelectedReport] = useState();
   const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState();
+  const [selectedUser, setSelectedUser] = useState(user_Id);
   useEffect(() => {
     const fetchDatabases = async () => {
       if (!userGroup || userGroup === 3) return null;
       try {
         if (Number(userGroup) === 1) {
-          const response1 = await ReportAPI.AllReport();
-          setReports(response1.data);
+          const response1 = await UserAPI.getApprovedUsers();
+          setUsers(response1.data);
+
+          const response2 = await ReportAPI.UserAvailableReports(
+            Number(selectedUser)
+          );
+          setReports(response2.data);
         } else {
-          const response1 = await ReportAPI.UsersReport(user_Id);
-          setReports(response1.data);
+          const response1 = await UserAPI.GetApprovedEmployeeWithSpacificUser(
+            user_Id
+          );
+          setUsers(response1.data);
+
+          const response2 = await ReportAPI.UserAvailableReportsManager(
+            selectedUser,
+            user_Id
+          );
+          setReports(response2.data);
         }
-        const response2 = await UserAPI.getUser();
-        setUsers(response2.data);
       } catch (error) {
         console.error("Error fetching Data:", error);
       }
     };
     fetchDatabases();
-  }, [userGroup]);
+  }, [userGroup, selectedUser]);
 
   const handleSbmit = async () => {
     let response;
@@ -62,16 +73,15 @@ const ReportstoUser = () => {
       </h1>
       <div className="ReportstoUser_Selector">
         <Selector
-          selectorValues={reports}
-          onSelect={onSelectReport}
-          selectedValue={selectedReport}
+          selectorValues={users}
+          onSelect={onSelectUser}
+          selectedValue={selectedUser}
         />
-
-        {selectedReport && userGroup === 1 && (
+        {selectedUser && (
           <Selector
-            selectorValues={users}
-            onSelect={onSelectUser}
-            selectedValue={selectedUser}
+            selectorValues={reports}
+            onSelect={onSelectReport}
+            selectedValue={selectedReport}
           />
         )}
       </div>

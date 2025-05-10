@@ -13,7 +13,8 @@ const DatabasetoUser = () => {
   const [databases, setDatabases] = useState([]);
   const [selectedDatabase, setSelectedDatabase] = useState();
   const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState();
+  const [selectedUser, setSelectedUser] = useState(user_Id);
+  const [selectedUserBranches, setSelectedUserBranches] = useState();
   const [userName, setUserName] = useState("");
   const [userPassword, setUserPassword] = useState("");
 
@@ -21,16 +22,31 @@ const DatabasetoUser = () => {
     const fetchDatabases = async () => {
       if (!userGroup) return null;
       try {
-        const response1 = await DatabaseAPI.getAllDatabases();
-        setDatabases(response1.data);
-        const response2 = await UserAPI.getUser();
-        setUsers(response2.data);
+        if (Number(userGroup) === 1) {
+          const response1 = await UserAPI.getApprovedUsers();
+          setUsers(response1.data);
+          const response2 = await DatabaseAPI.getAvailableDatabases(
+            Number(selectedUser)
+          );
+          setDatabases(response2.data);
+        } else {
+          const response1 = await UserAPI.GetApprovedEmployeeWithSpacificUser(
+            user_Id
+          );
+          setUsers(response1.data);
+          const response2 =
+            await DatabaseAPI.getUserAvailableDatabasesForManager(
+              Number(selectedUser),
+              user_Id
+            );
+          setDatabases(response2.data);
+        }
       } catch (error) {
         console.error("Error fetching databases:", error);
       }
     };
     fetchDatabases();
-  }, [userGroup]);
+  }, [userGroup, selectedUser]);
 
   const handleSbmit = async () => {
     let response;
@@ -63,7 +79,7 @@ const DatabasetoUser = () => {
   const onSelectUser = (user) => {
     setSelectedUser(user);
   };
-
+  console.log("databases", databases);
   return (
     <div className={`DatabasetoUser_container ${isDarkMode ? "dark" : ""}`}>
       <h1>
@@ -71,16 +87,16 @@ const DatabasetoUser = () => {
       </h1>
       <div className="DatabasetoUser_Selector">
         <Selector
-          selectorValues={databases}
-          onSelect={onSelectDatabase}
-          selectedValue={selectedDatabase}
+          selectorValues={users}
+          onSelect={onSelectUser}
+          selectedValue={selectedUser}
         />
 
-        {selectedDatabase && userGroup === 1 && (
+        {selectedUser && (
           <Selector
-            selectorValues={users}
-            onSelect={onSelectUser}
-            selectedValue={selectedUser}
+            selectorValues={databases}
+            onSelect={onSelectDatabase}
+            selectedValue={selectedDatabase}
           />
         )}
       </div>
