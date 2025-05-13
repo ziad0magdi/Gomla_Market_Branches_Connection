@@ -68,7 +68,7 @@ class BranchesModel {
     + SUM(CASE WHEN a_name = N'Voucher' THEN p.payment_value ELSE 0 END)
 	+ SUM(CASE WHEN a_name = N'إستبدال نقاط' THEN p.payment_value ELSE 0 END)
   ) AS Sold_Value,
-  cf.Paid_value,
+  cf.Paid_Value,
   ABS(cf.Paid_value) - ABS(
     SUM(CASE 
           WHEN a_name = N'نقدى' THEN p.payment_value
@@ -79,7 +79,7 @@ class BranchesModel {
     + SUM(CASE WHEN a_name = N'كوبون' THEN p.payment_value ELSE 0 END)
     + SUM(CASE WHEN a_name = N'Voucher' THEN p.payment_value ELSE 0 END)
 	+ SUM(CASE WHEN a_name = N'إستبدال نقاط' THEN p.payment_value ELSE 0 END)
-  ) AS Value_difference,
+  ) AS Value_Difference,
   SUM(CASE WHEN a_name = N'الباقى' THEN p.payment_value * -1 ELSE 0 END) AS Remaining_Total,
   COUNT(CASE WHEN a_name = N'الباقى' THEN 1 END) AS Remaining_Count,
   SUM(CASE 

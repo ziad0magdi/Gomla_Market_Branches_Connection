@@ -1,4 +1,4 @@
-import { React, useEffect, useState, useCallback } from "react";
+import { React, useEffect, useState, useCallback, useRef } from "react";
 import BranchAPI from "../../APIs/BrancheAPI";
 import { useUser } from "../../context/UserContext";
 import Button from "../Button/Button";
@@ -30,6 +30,14 @@ const Report = ({ database_id, report_id, reportHeder, filters, date }) => {
   const [yData, setYData] = useState([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const chartRef = useRef(null);
+
+  useEffect(() => {
+    if (showChart && chartRef.current) {
+      chartRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [showChart]);
 
   const fetchData = useCallback(async () => {
     setError(false);
@@ -172,7 +180,6 @@ const Report = ({ database_id, report_id, reportHeder, filters, date }) => {
                   .toLowerCase()
                   .includes(filters.toLowerCase())
               )
-
               .map((object, index) => {
                 const keys = Object.keys(object);
                 return (
@@ -204,6 +211,152 @@ const Report = ({ database_id, report_id, reportHeder, filters, date }) => {
                   </tr>
                 );
               })}
+
+            {/* Summation Row */}
+            <tr
+              className="summary-row"
+              style={{ fontWeight: "bold", background: "#f0f0f0" }}
+            >
+              <td>{language === "en" ? "Total" : "الإجمالي"}</td>
+              <td>
+                {data
+                  .filter((object) =>
+                    String(object.Cashier)
+                      .toLowerCase()
+                      .includes(filters.toLowerCase())
+                  )
+                  .reduce((acc, obj) => acc + Number(obj.Sold_Value || 0), 0)}
+              </td>
+              <td>
+                {data
+                  .filter((object) =>
+                    String(object.Cashier)
+                      .toLowerCase()
+                      .includes(filters.toLowerCase())
+                  )
+                  .reduce((acc, obj) => acc + Number(obj.Paid_Value || 0), 0)}
+              </td>
+              <td>
+                {data
+                  .filter((object) =>
+                    String(object.Cashier)
+                      .toLowerCase()
+                      .includes(filters.toLowerCase())
+                  )
+                  .reduce(
+                    (acc, obj) => acc + Number(obj.Value_Difference || 0),
+                    0
+                  )}
+              </td>
+              <td>
+                {data
+                  .filter((object) =>
+                    String(object.Cashier)
+                      .toLowerCase()
+                      .includes(filters.toLowerCase())
+                  )
+                  .reduce((acc, obj) => acc + Number(obj.Cash_Total || 0), 0)}
+              </td>
+              <td>
+                {data
+                  .filter((object) =>
+                    String(object.Cashier)
+                      .toLowerCase()
+                      .includes(filters.toLowerCase())
+                  )
+                  .reduce((acc, obj) => acc + Number(obj.Cash_Count || 0), 0)}
+              </td>
+              <td>
+                {data
+                  .filter((object) =>
+                    String(object.Cashier)
+                      .toLowerCase()
+                      .includes(filters.toLowerCase())
+                  )
+                  .reduce(
+                    (acc, obj) => acc + Number(obj.CreditCard_Total || 0),
+                    0
+                  )}
+              </td>
+              <td>
+                {data
+                  .filter((object) =>
+                    String(object.Cashier)
+                      .toLowerCase()
+                      .includes(filters.toLowerCase())
+                  )
+                  .reduce(
+                    (acc, obj) => acc + Number(obj.CreditCard_Count || 0),
+                    0
+                  )}
+              </td>
+              <td>
+                {data
+                  .filter((object) =>
+                    String(object.Cashier)
+                      .toLowerCase()
+                      .includes(filters.toLowerCase())
+                  )
+                  .reduce((acc, obj) => acc + Number(obj.Coupon_Total || 0), 0)}
+              </td>
+              <td>
+                {data
+                  .filter((object) =>
+                    String(object.Cashier)
+                      .toLowerCase()
+                      .includes(filters.toLowerCase())
+                  )
+                  .reduce((acc, obj) => acc + Number(obj.Coupon_Count || 0), 0)}
+              </td>
+              <td>
+                {data
+                  .filter((object) =>
+                    String(object.Cashier)
+                      .toLowerCase()
+                      .includes(filters.toLowerCase())
+                  )
+                  .reduce(
+                    (acc, obj) => acc + Number(obj.Voucher_Total || 0),
+                    0
+                  )}
+              </td>
+              <td>
+                {data
+                  .filter((object) =>
+                    String(object.Cashier)
+                      .toLowerCase()
+                      .includes(filters.toLowerCase())
+                  )
+                  .reduce(
+                    (acc, obj) => acc + Number(obj.Voucher_Count || 0),
+                    0
+                  )}
+              </td>
+              <td>
+                {data
+                  .filter((object) =>
+                    String(object.Cashier)
+                      .toLowerCase()
+                      .includes(filters.toLowerCase())
+                  )
+                  .reduce(
+                    (acc, obj) => acc + Number(obj.PointsRedeem_Total || 0),
+                    0
+                  )}
+              </td>
+              <td>
+                {data
+                  .filter((object) =>
+                    String(object.Cashier)
+                      .toLowerCase()
+                      .includes(filters.toLowerCase())
+                  )
+                  .reduce(
+                    (acc, obj) => acc + Number(obj.PointsRedeem_Count || 0),
+                    0
+                  )}
+              </td>
+            </tr>
           </tbody>
         </table>
         <div className="Report_button">
@@ -247,7 +400,7 @@ const Report = ({ database_id, report_id, reportHeder, filters, date }) => {
           )}
         </div>
         {showChart && (
-          <div className="Report_chart">
+          <div className="Report_chart" ref={chartRef}>
             {selectedChart === "1" && <BarChart xData={xData} yData={yData} />}
             {/* {selectedChart === "2" && <PieChart labels={xData} data={yData} />} */}
           </div>

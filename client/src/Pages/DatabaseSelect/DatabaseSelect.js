@@ -8,6 +8,7 @@ import DateInput from "../../Components/Inputs/DateInput";
 import Button from "../../Components/Button/Button";
 import Report from "../../Components/Report/Report";
 import SearchBar from "../../Components/SearchBar/SearchBar";
+import Modal from "../../Components/Modal/Modal";
 
 const DatabaseSelect = () => {
   const { language, isDarkMode, user_Id } = useUser();
@@ -103,7 +104,7 @@ const DatabaseSelect = () => {
         </div>
       )}
       {showReport && (
-        <div className="DatabaseSelect_input">
+        <Modal onClose={() => setShowReport(false)}>
           <SearchBar
             setData={setUserName}
             searchText={
@@ -112,16 +113,14 @@ const DatabaseSelect = () => {
                 : "ابحث بأستخدام رقم الكاشير"
             }
           />
-        </div>
-      )}
-      {showReport && (
-        <Report
-          database_id={selectedDatabase}
-          report_id={selectedReport}
-          filters={userName}
-          reportHeder={selectedReportName}
-          date={dateFrom}
-        />
+          <Report
+            database_id={selectedDatabase}
+            report_id={selectedReport}
+            filters={userName}
+            reportHeder={selectedReportName}
+            date={dateFrom}
+          />
+        </Modal>
       )}
     </div>
   );

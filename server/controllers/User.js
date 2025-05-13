@@ -124,7 +124,7 @@ class UsersController {
         user_branch_id,
         user_department_id
       );
-      return res.json({ success: true });
+      return res.json({ status: "success" });
     } catch (error) {
       console.error("Error adding User:", error);
       return res.status(500).json({ message: "Server Error", error });

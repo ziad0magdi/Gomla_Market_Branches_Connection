@@ -1,27 +1,23 @@
 .Report_table {
   width: 80%;
+  border-collapse: collapse;
   border: 1px solid #ccc;
-  text-align: start;
+  text-align: center;
   justify-self: center;
+  font-family: "Cairo", "Tahoma", sans-serif;
+  font-size: 15px;
+  direction: rtl;
+  color: white;
 }
 
 .Report_table th {
   transition: color 0.3s ease;
-  background-color: #66bb6a;
-  border: 1px solid #ccc;
+  background-color: #ff7b00;
   color: white;
-  font-size: large;
+  font-size: 16px;
   font-weight: bold;
-}
-
-.Report_tableWrapper {
-  max-height: calc(10 * 50px);
-
-  overflow-y: auto;
-}
-
-/* Optional: fix table header to stay at the top while scrolling */
-.Report_table thead th {
+  padding: 10px;
+  border: 1px solid #ccc;
   position: sticky;
   top: 0;
   z-index: 1;
@@ -29,10 +25,14 @@
 
 .Report_table td {
   border: 1px solid #ccc;
+  padding: 8px;
+  background-color: #1e1e1e;
+  vertical-align: middle;
 }
 
 .Report_table td:hover {
-  background-color: #8a8a8a;
+  background-color: #555;
+  cursor: pointer;
 }
 
 .Report_table.dark th {
@@ -40,12 +40,12 @@
 }
 
 .Report_table tr.selected-row {
-  background-color: #cce5ff; /* light blue background */
+  background-color: #cce5ff;
   transition: background-color 0.3s ease;
 }
 
 .Report_table.dark tr.selected-row {
-  background-color: #334d66; /* darker blue for dark mode */
+  background-color: #334d66;
 }
 
 .Report_button {
@@ -62,9 +62,11 @@
   justify-content: center;
   align-items: center;
 }
+
 .Report_chart.dark {
   background-color: #2e2e2e;
 }
+
 .Date_title {
   display: flex;
   justify-content: center;
@@ -73,11 +75,13 @@
 .negative {
   background-color: red;
 }
+
 .Report_Selector {
   display: flex;
   justify-content: space-around;
   width: 100%;
 }
+
 @media (max-width: 768px) {
   .Report_button {
     min-height: 30%;

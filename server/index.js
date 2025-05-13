@@ -15,10 +15,19 @@ app.use(express.urlencoded({ extended: true }));
 app.use(flash());
 app.use(cookieParser());
 
+const allowedPattern =
+  /^http:\/\/(localhost|10\.d{1,3}\.\d{1,3}\.\d{1,3}):\d+$/;
+
 app.use(
   cors({
-    origin: true, // Allow all origins
-    credentials: true, // Allow cookies
+    origin: (origin, callback) => {
+      if (!origin || allowedPattern.test(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );

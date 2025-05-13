@@ -46,8 +46,7 @@ WHERE user_Id <> @user_Id`;
     try {
       const query = `SELECT 
 user_id, 
-user_fname,
-user_lname,
+user_fname + ' ' + user_lname AS 'Employee_Full_Name',
 user_phone,
 user_email,
 B.branch_name,

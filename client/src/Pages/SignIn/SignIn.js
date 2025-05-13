@@ -84,7 +84,10 @@ const SignIn = () => {
             placeholder={language === "en" ? "Email:" : " الايميل:"}
             name="username"
             onChange={(event) =>
-              setFormData({ ...formData, user_email: event.target.value })
+              setFormData({
+                ...formData,
+                user_email: event.target.value + "@gomlamarket.com",
+              })
             }
           />
           <input

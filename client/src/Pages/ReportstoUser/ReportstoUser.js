@@ -50,7 +50,8 @@ const ReportstoUser = () => {
     } else {
       response = await ReportAPI.AddUserReport(selectedReport, selectedUser);
     }
-    if (response.status === "success") {
+    console.log(response);
+    if (response.status === 200) {
       toast.success(
         language === "en"
           ? "Branch added to the user successfully"

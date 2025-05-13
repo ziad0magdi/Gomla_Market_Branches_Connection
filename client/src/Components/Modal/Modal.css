@@ -1,0 +1,51 @@
+.Modal_overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.Max_Modal_content {
+  min-width: 90%;
+}
+
+.Modal_content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  resize: both;
+  overflow: auto;
+  max-width: 90%;
+  max-height: 90%;
+  min-width: 300px;
+  min-height: 200px;
+  position: relative;
+}
+
+.Modal_content.dark {
+  background-color: #222;
+  color: white;
+}
+
+.Modal_header {
+  display: flex;
+  width: 10%;
+}
+
+.Modal_close {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  color: red;
+  cursor: pointer;
+}

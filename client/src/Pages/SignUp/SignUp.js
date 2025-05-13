@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
 import DepartmentAPI from "../../APIs/DepartmentAPI";
 import BranchAPI from "../../APIs/BrancheAPI";
@@ -37,7 +37,13 @@ const SignUp = () => {
     fetchData();
   }, []);
 
-  const handleSubmit = async () => {
+  const handleFinshSignUp = () => {
+    navigate("/");
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // ⬅️ prevent browser reload
+
     if (
       !user_fname ||
       !user_lname ||
@@ -48,6 +54,7 @@ const SignUp = () => {
       !selectedDepartment
     )
       return null;
+
     try {
       const response = await UserAPI.AddUser(
         user_fname,
@@ -59,12 +66,14 @@ const SignUp = () => {
         Number(selectedDepartment)
       );
 
-      toast.success(
-        language === "en"
-          ? "User Adding successfully!"
-          : "تم إضافة المستخدم بنجاح"
-      );
-      navigate("/");
+      if (response.data.status === "success") {
+        toast.success(
+          language === "en"
+            ? "User Adding successfully!"
+            : "تم إضافة المستخدم بنجاح"
+        );
+        navigate("/");
+      }
     } catch (error) {
       console.error("Error Adding User:", error);
     }
