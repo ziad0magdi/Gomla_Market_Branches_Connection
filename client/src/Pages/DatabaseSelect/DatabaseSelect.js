@@ -25,11 +25,13 @@ const DatabaseSelect = () => {
 
   const [dateFrom, setDateFrom] = useState(fullDate);
   // const [dateTo, setDateTo] = useState([]);
-  const [userName, setUserName] = useState("");
+  const [chashirId, setCashirId] = useState("");
   const [showReport, setShowReport] = useState(false);
   const [Reports, setReports] = useState([]);
   const [selectedReport, setSelectedReport] = useState();
   const [selectedReportName, setSelectedReportName] = useState("");
+  const [selectedChashir, setSelectedChashir] = useState();
+
   useEffect(() => {
     const fetchData = async () => {
       if (!user_Id) return null;
@@ -106,7 +108,7 @@ const DatabaseSelect = () => {
       {showReport && (
         <Modal onClose={() => setShowReport(false)}>
           <SearchBar
-            setData={setUserName}
+            setData={setCashirId}
             searchText={
               language === "en"
                 ? "Search by Cashier ID"
@@ -116,7 +118,7 @@ const DatabaseSelect = () => {
           <Report
             database_id={selectedDatabase}
             report_id={selectedReport}
-            filters={userName}
+            filters={chashirId}
             reportHeder={selectedReportName}
             date={dateFrom}
           />

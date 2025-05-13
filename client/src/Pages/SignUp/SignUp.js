@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
 import DepartmentAPI from "../../APIs/DepartmentAPI";
 import BranchAPI from "../../APIs/BrancheAPI";

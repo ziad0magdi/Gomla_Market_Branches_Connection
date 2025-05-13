@@ -212,151 +212,182 @@ const Report = ({ database_id, report_id, reportHeder, filters, date }) => {
                 );
               })}
 
-            {/* Summation Row */}
-            <tr
-              className="summary-row"
-              style={{ fontWeight: "bold", background: "#f0f0f0" }}
-            >
-              <td>{language === "en" ? "Total" : "الإجمالي"}</td>
-              <td>
-                {data
-                  .filter((object) =>
-                    String(object.Cashier)
-                      .toLowerCase()
-                      .includes(filters.toLowerCase())
-                  )
-                  .reduce((acc, obj) => acc + Number(obj.Sold_Value || 0), 0)}
-              </td>
-              <td>
-                {data
-                  .filter((object) =>
-                    String(object.Cashier)
-                      .toLowerCase()
-                      .includes(filters.toLowerCase())
-                  )
-                  .reduce((acc, obj) => acc + Number(obj.Paid_Value || 0), 0)}
-              </td>
-              <td>
-                {data
-                  .filter((object) =>
-                    String(object.Cashier)
-                      .toLowerCase()
-                      .includes(filters.toLowerCase())
-                  )
-                  .reduce(
-                    (acc, obj) => acc + Number(obj.Value_Difference || 0),
-                    0
+            {Number(report_id) === 2 && (
+              <tr
+                className="summary-row"
+                style={{ fontWeight: "bold", background: "#f0f0f0" }}
+              >
+                <td>{language === "en" ? "Total" : "الإجمالي"}</td>
+                <td>
+                  {data
+                    .filter((object) =>
+                      String(object.Cashier)
+                        .toLowerCase()
+                        .includes(filters.toLowerCase())
+                    )
+                    .reduce((acc, obj) => acc + Number(obj.Sold_Value || 0), 0)
+                    .toFixed(2)}
+                </td>
+                <td>
+                  {data
+                    .filter((object) =>
+                      String(object.Cashier)
+                        .toLowerCase()
+                        .includes(filters.toLowerCase())
+                    )
+                    .reduce((acc, obj) => acc + Number(obj.Paid_Value || 0), 0)
+                    .toFixed(2)}
+                </td>
+                <td>
+                  {Number(
+                    (
+                      data
+                        .filter((object) =>
+                          String(object.Cashier)
+                            .toLowerCase()
+                            .includes(filters.toLowerCase())
+                        )
+                        .reduce(
+                          (acc, obj) => acc + Number(obj.Paid_Value || 0),
+                          0
+                        ) -
+                      data
+                        .filter((object) =>
+                          String(object.Cashier)
+                            .toLowerCase()
+                            .includes(filters.toLowerCase())
+                        )
+                        .reduce(
+                          (acc, obj) => acc + Number(obj.Sold_Value || 0),
+                          0
+                        )
+                    ).toFixed(2)
                   )}
-              </td>
-              <td>
-                {data
-                  .filter((object) =>
-                    String(object.Cashier)
-                      .toLowerCase()
-                      .includes(filters.toLowerCase())
-                  )
-                  .reduce((acc, obj) => acc + Number(obj.Cash_Total || 0), 0)}
-              </td>
-              <td>
-                {data
-                  .filter((object) =>
-                    String(object.Cashier)
-                      .toLowerCase()
-                      .includes(filters.toLowerCase())
-                  )
-                  .reduce((acc, obj) => acc + Number(obj.Cash_Count || 0), 0)}
-              </td>
-              <td>
-                {data
-                  .filter((object) =>
-                    String(object.Cashier)
-                      .toLowerCase()
-                      .includes(filters.toLowerCase())
-                  )
-                  .reduce(
-                    (acc, obj) => acc + Number(obj.CreditCard_Total || 0),
-                    0
-                  )}
-              </td>
-              <td>
-                {data
-                  .filter((object) =>
-                    String(object.Cashier)
-                      .toLowerCase()
-                      .includes(filters.toLowerCase())
-                  )
-                  .reduce(
-                    (acc, obj) => acc + Number(obj.CreditCard_Count || 0),
-                    0
-                  )}
-              </td>
-              <td>
-                {data
-                  .filter((object) =>
-                    String(object.Cashier)
-                      .toLowerCase()
-                      .includes(filters.toLowerCase())
-                  )
-                  .reduce((acc, obj) => acc + Number(obj.Coupon_Total || 0), 0)}
-              </td>
-              <td>
-                {data
-                  .filter((object) =>
-                    String(object.Cashier)
-                      .toLowerCase()
-                      .includes(filters.toLowerCase())
-                  )
-                  .reduce((acc, obj) => acc + Number(obj.Coupon_Count || 0), 0)}
-              </td>
-              <td>
-                {data
-                  .filter((object) =>
-                    String(object.Cashier)
-                      .toLowerCase()
-                      .includes(filters.toLowerCase())
-                  )
-                  .reduce(
-                    (acc, obj) => acc + Number(obj.Voucher_Total || 0),
-                    0
-                  )}
-              </td>
-              <td>
-                {data
-                  .filter((object) =>
-                    String(object.Cashier)
-                      .toLowerCase()
-                      .includes(filters.toLowerCase())
-                  )
-                  .reduce(
-                    (acc, obj) => acc + Number(obj.Voucher_Count || 0),
-                    0
-                  )}
-              </td>
-              <td>
-                {data
-                  .filter((object) =>
-                    String(object.Cashier)
-                      .toLowerCase()
-                      .includes(filters.toLowerCase())
-                  )
-                  .reduce(
-                    (acc, obj) => acc + Number(obj.PointsRedeem_Total || 0),
-                    0
-                  )}
-              </td>
-              <td>
-                {data
-                  .filter((object) =>
-                    String(object.Cashier)
-                      .toLowerCase()
-                      .includes(filters.toLowerCase())
-                  )
-                  .reduce(
-                    (acc, obj) => acc + Number(obj.PointsRedeem_Count || 0),
-                    0
-                  )}
-              </td>
-            </tr>
+                </td>
+                <td>
+                  {data
+                    .filter((object) =>
+                      String(object.Cashier)
+                        .toLowerCase()
+                        .includes(filters.toLowerCase())
+                    )
+                    .reduce(
+                      (acc, obj) => acc + parseFloat(obj.Cash_Total || 0),
+                      0
+                    )
+                    .toFixed(2)}
+                </td>
+                <td>
+                  {data
+                    .filter((object) =>
+                      String(object.Cashier)
+                        .toLowerCase()
+                        .includes(filters.toLowerCase())
+                    )
+                    .reduce((acc, obj) => acc + Number(obj.Cash_Count || 0), 0)}
+                </td>
+                <td>
+                  {data
+                    .filter((object) =>
+                      String(object.Cashier)
+                        .toLowerCase()
+                        .includes(filters.toLowerCase())
+                    )
+                    .reduce(
+                      (acc, obj) => acc + Number(obj.CreditCard_Total || 0),
+                      0
+                    )
+                    .toFixed(2)}
+                </td>
+                <td>
+                  {data
+                    .filter((object) =>
+                      String(object.Cashier)
+                        .toLowerCase()
+                        .includes(filters.toLowerCase())
+                    )
+                    .reduce(
+                      (acc, obj) => acc + Number(obj.CreditCard_Count || 0),
+                      0
+                    )}
+                </td>
+                <td>
+                  {data
+                    .filter((object) =>
+                      String(object.Cashier)
+                        .toLowerCase()
+                        .includes(filters.toLowerCase())
+                    )
+                    .reduce(
+                      (acc, obj) => acc + Number(obj.Coupon_Total || 0),
+                      0
+                    )
+                    .toFixed(2)}
+                </td>
+                <td>
+                  {data
+                    .filter((object) =>
+                      String(object.Cashier)
+                        .toLowerCase()
+                        .includes(filters.toLowerCase())
+                    )
+                    .reduce(
+                      (acc, obj) => acc + Number(obj.Coupon_Count || 0),
+                      0
+                    )}
+                </td>
+                <td>
+                  {data
+                    .filter((object) =>
+                      String(object.Cashier)
+                        .toLowerCase()
+                        .includes(filters.toLowerCase())
+                    )
+                    .reduce(
+                      (acc, obj) => acc + Number(obj.Voucher_Total || 0),
+                      0
+                    )
+                    .toFixed(2)}
+                </td>
+                <td>
+                  {data
+                    .filter((object) =>
+                      String(object.Cashier)
+                        .toLowerCase()
+                        .includes(filters.toLowerCase())
+                    )
+                    .reduce(
+                      (acc, obj) => acc + Number(obj.Voucher_Count || 0),
+                      0
+                    )}
+                </td>
+                <td>
+                  {data
+                    .filter((object) =>
+                      String(object.Cashier)
+                        .toLowerCase()
+                        .includes(filters.toLowerCase())
+                    )
+                    .reduce(
+                      (acc, obj) => acc + Number(obj.PointsRedeem_Total || 0),
+                      0
+                    )
+                    .toFixed(2)}
+                </td>
+                <td>
+                  {data
+                    .filter((object) =>
+                      String(object.Cashier)
+                        .toLowerCase()
+                        .includes(filters.toLowerCase())
+                    )
+                    .reduce(
+                      (acc, obj) => acc + Number(obj.PointsRedeem_Count || 0),
+                      0
+                    )}
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
         <div className="Report_button">
